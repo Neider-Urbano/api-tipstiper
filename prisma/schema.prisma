@@ -1,0 +1,176 @@
+// ============================================
+// schema.prisma — Plataforma de Tipsters
+// Prisma 7: el datasource url se configura en
+// prisma.config.ts, no aquí.
+// ============================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── ENUMS ───────────────────────────────────────────
+
+enum Role {
+  TIPSTER
+  BETTOR
+}
+
+enum PickStatus {
+  PENDING
+  LOCKED
+  WON
+  LOST
+  VOID
+}
+
+enum SubStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+enum PayStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+// ─── USERS ───────────────────────────────────────────
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  username    String   @unique
+  password    String
+  role        Role
+  avatarUrl   String?
+  bio         String?
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  stats         TipsterStats?
+  picks         Pick[]
+  following     Follow[]       @relation("Follower")
+  followers     Follow[]       @relation("Tipster")
+  subscriptions Subscription[] @relation("Bettor")
+  subscribers   Subscription[] @relation("TipsterSub")
+  payments      Payment[]
+
+  @@map("users")
+}
+
+// ─── TIPSTER STATS ───────────────────────────────────
+
+model TipsterStats {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  totalPicks Int      @default(0)
+  wonPicks   Int      @default(0)
+  yield      Decimal  @default(0) @db.Decimal(8, 2)
+  roi        Decimal  @default(0) @db.Decimal(8, 2)
+  unitsWon   Decimal  @default(0) @db.Decimal(8, 2)
+  winRate    Decimal  @default(0) @db.Decimal(5, 2)
+  streak     Int      @default(0)
+  updatedAt  DateTime @updatedAt
+
+  @@map("tipster_stats")
+}
+
+// ─── PICKS ───────────────────────────────────────────
+
+model Pick {
+  id          String     @id @default(uuid())
+  tipsterId   String
+  tipster     User       @relation(fields: [tipsterId], references: [id], onDelete: Cascade)
+
+  matchId     String
+  matchDate   DateTime
+  sport       String     @default("football")
+  league      String
+  homeTeam    String
+  awayTeam    String
+
+  pickType    String
+  pickValue   String
+  odds        Decimal    @db.Decimal(6, 2)
+  stake       Int
+  analysis    String?
+  isPremium   Boolean    @default(false)
+
+  status      PickStatus @default(PENDING)
+  publishedAt DateTime   @default(now())
+  lockedAt    DateTime?
+
+  @@index([tipsterId])
+  @@index([status])
+  @@index([matchDate])
+  @@map("picks")
+}
+
+// ─── FOLLOWS ─────────────────────────────────────────
+
+model Follow {
+  id         String   @id @default(uuid())
+  followerId String
+  tipsterId  String
+  follower   User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  tipster    User     @relation("Tipster", fields: [tipsterId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([followerId, tipsterId])
+  @@map("follows")
+}
+
+// ─── SUBSCRIPTIONS ───────────────────────────────────
+
+model Subscription {
+  id          String    @id @default(uuid())
+  bettorId    String
+  tipsterId   String
+  bettor      User      @relation("Bettor", fields: [bettorId], references: [id], onDelete: Cascade)
+  tipster     User      @relation("TipsterSub", fields: [tipsterId], references: [id], onDelete: Cascade)
+
+  planPrice   Decimal   @db.Decimal(12, 2)
+  currency    String    @default("COP")
+  status      SubStatus @default(ACTIVE)
+  startedAt   DateTime  @default(now())
+  renewsAt    DateTime
+  wompiSubId  String?
+
+  payments    Payment[]
+
+  @@index([bettorId])
+  @@index([tipsterId])
+  @@map("subscriptions")
+}
+
+// ─── PAYMENTS ────────────────────────────────────────
+
+model Payment {
+  id             String       @id @default(uuid())
+  subscriptionId String
+  tipsterId      String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  tipster        User         @relation(fields: [tipsterId], references: [id])
+
+  grossAmount    Decimal      @db.Decimal(12, 2)
+  platformFee    Decimal      @db.Decimal(12, 2)
+  netAmount      Decimal      @db.Decimal(12, 2)
+  currency       String       @default("COP")
+  status         PayStatus    @default(PENDING)
+  wompiTxId      String?
+  paidAt         DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([tipsterId])
+  @@index([subscriptionId])
+  @@map("payments")
+}
