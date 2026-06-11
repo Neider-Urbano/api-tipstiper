@@ -1,6 +1,6 @@
-import { $Enums } from "@/generated/prisma/client";
 import { verifyToken } from "./jwt";
 import { JwtPayload } from "./types";
+import { $Enums } from "@/generated/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 // Extrae y verifica el JWT del header Authorization
