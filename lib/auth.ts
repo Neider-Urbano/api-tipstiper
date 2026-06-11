@@ -1,3 +1,4 @@
+import { $Enums } from "@/generated/prisma/client";
 import { verifyToken } from "./jwt";
 import { JwtPayload } from "./types";
 import { NextRequest, NextResponse } from "next/server";
@@ -40,7 +41,7 @@ export async function requireAuth(
 // Igual pero exige un rol específico
 export async function requireRole(
   req: NextRequest,
-  role: "TIPSTER" | "BETTOR",
+  role: $Enums.Role,
   handler: (user: JwtPayload) => Promise<NextResponse>,
 ): Promise<NextResponse> {
   return requireAuth(req, async (user) => {
@@ -48,7 +49,7 @@ export async function requireRole(
       return NextResponse.json(
         {
           success: false,
-          error: `Solo los ${role === "TIPSTER" ? "tipsters" : "apostadores"} pueden hacer esto`,
+          error: `Solo los ${role === $Enums.Role.TIPSTER ? "tipsters" : "apostadores"} pueden hacer esto`,
         },
         { status: 403 },
       );

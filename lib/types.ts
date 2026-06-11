@@ -1,10 +1,11 @@
 import { NextRequest } from "next/server";
+import { $Enums } from "@/generated/prisma/client";
 
 // Payload que va dentro del JWT
 export interface JwtPayload {
   userId: string;
   email: string;
-  role: "TIPSTER" | "BETTOR";
+  role: $Enums.Role;
 }
 
 // NextRequest extendido con el usuario autenticado

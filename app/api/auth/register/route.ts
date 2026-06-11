@@ -1,13 +1,15 @@
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { signToken } from "@/lib/jwt";
+import { allowedRoles } from "@/lib/user";
 import { NextRequest, NextResponse } from "next/server";
+import { $Enums } from "@/generated/prisma/client";
 
 interface RegisterBody {
   email: string;
   username: string;
   password: string;
-  role: "TIPSTER" | "BETTOR";
+  role: $Enums.Role;
 }
 
 export async function POST(req: NextRequest) {
@@ -26,9 +28,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!["TIPSTER", "BETTOR"].includes(role)) {
+    if (!allowedRoles.includes(role)) {
       return NextResponse.json(
-        { success: false, error: "role debe ser TIPSTER o BETTOR" },
+        { success: false, error: "role no encontrado" },
         { status: 400 },
       );
     }
@@ -81,7 +83,7 @@ export async function POST(req: NextRequest) {
         password: hashedPassword,
         role,
         // Si es tipster, crear sus stats vacías automáticamente
-        ...(role === "TIPSTER" && {
+        ...(role === $Enums.Role.TIPSTER && {
           stats: { create: {} },
         }),
       },
