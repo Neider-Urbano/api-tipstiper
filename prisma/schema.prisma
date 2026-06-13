@@ -53,7 +53,8 @@ model User {
   isVerified  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
+  subscriptionPrice Int?
+  
   stats         TipsterStats?
   picks         Pick[]
   following     Follow[]       @relation("Follower")

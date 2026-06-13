@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  subscriptionPrice: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  subscriptionPrice: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -35,6 +45,7 @@ export type UserMinAggregateOutputType = {
   isVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  subscriptionPrice: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -48,6 +59,7 @@ export type UserMaxAggregateOutputType = {
   isVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  subscriptionPrice: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -61,9 +73,18 @@ export type UserCountAggregateOutputType = {
   isVerified: number
   createdAt: number
   updatedAt: number
+  subscriptionPrice: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  subscriptionPrice?: true
+}
+
+export type UserSumAggregateInputType = {
+  subscriptionPrice?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -76,6 +97,7 @@ export type UserMinAggregateInputType = {
   isVerified?: true
   createdAt?: true
   updatedAt?: true
+  subscriptionPrice?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -89,6 +111,7 @@ export type UserMaxAggregateInputType = {
   isVerified?: true
   createdAt?: true
   updatedAt?: true
+  subscriptionPrice?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -102,6 +125,7 @@ export type UserCountAggregateInputType = {
   isVerified?: true
   createdAt?: true
   updatedAt?: true
+  subscriptionPrice?: true
   _all?: true
 }
 
@@ -143,6 +167,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -173,6 +209,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -188,7 +226,10 @@ export type UserGroupByOutputType = {
   isVerified: boolean
   createdAt: Date
   updatedAt: Date
+  subscriptionPrice: number | null
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -222,6 +263,7 @@ export type UserWhereInput = {
   isVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  subscriptionPrice?: Prisma.IntNullableFilter<"User"> | number | null
   stats?: Prisma.XOR<Prisma.TipsterStatsNullableScalarRelationFilter, Prisma.TipsterStatsWhereInput> | null
   picks?: Prisma.PickListRelationFilter
   following?: Prisma.FollowListRelationFilter
@@ -242,6 +284,7 @@ export type UserOrderByWithRelationInput = {
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   stats?: Prisma.TipsterStatsOrderByWithRelationInput
   picks?: Prisma.PickOrderByRelationAggregateInput
   following?: Prisma.FollowOrderByRelationAggregateInput
@@ -265,6 +308,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   isVerified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  subscriptionPrice?: Prisma.IntNullableFilter<"User"> | number | null
   stats?: Prisma.XOR<Prisma.TipsterStatsNullableScalarRelationFilter, Prisma.TipsterStatsWhereInput> | null
   picks?: Prisma.PickListRelationFilter
   following?: Prisma.FollowListRelationFilter
@@ -285,9 +329,12 @@ export type UserOrderByWithAggregationInput = {
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -304,6 +351,7 @@ export type UserScalarWhereWithAggregatesInput = {
   isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  subscriptionPrice?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
 }
 
 export type UserCreateInput = {
@@ -317,6 +365,7 @@ export type UserCreateInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -337,6 +386,7 @@ export type UserUncheckedCreateInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -357,6 +407,7 @@ export type UserUpdateInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -377,6 +428,7 @@ export type UserUncheckedUpdateInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -397,6 +449,7 @@ export type UserCreateManyInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -410,6 +463,7 @@ export type UserUpdateManyMutationInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -423,6 +477,7 @@ export type UserUncheckedUpdateManyInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -436,6 +491,11 @@ export type UserCountOrderByAggregateInput = {
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  subscriptionPrice?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -449,6 +509,7 @@ export type UserMaxOrderByAggregateInput = {
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -462,6 +523,11 @@ export type UserMinOrderByAggregateInput = {
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  subscriptionPrice?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  subscriptionPrice?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -487,6 +553,14 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type UserCreateNestedOneWithoutStatsInput = {
@@ -598,6 +672,7 @@ export type UserCreateWithoutStatsInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
@@ -617,6 +692,7 @@ export type UserUncheckedCreateWithoutStatsInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
@@ -652,6 +728,7 @@ export type UserUpdateWithoutStatsInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
@@ -671,6 +748,7 @@ export type UserUncheckedUpdateWithoutStatsInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
@@ -690,6 +768,7 @@ export type UserCreateWithoutPicksInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
@@ -709,6 +788,7 @@ export type UserUncheckedCreateWithoutPicksInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
@@ -744,6 +824,7 @@ export type UserUpdateWithoutPicksInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
@@ -763,6 +844,7 @@ export type UserUncheckedUpdateWithoutPicksInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
@@ -782,6 +864,7 @@ export type UserCreateWithoutFollowingInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
@@ -801,6 +884,7 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
@@ -825,6 +909,7 @@ export type UserCreateWithoutFollowersInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -844,6 +929,7 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -879,6 +965,7 @@ export type UserUpdateWithoutFollowingInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
@@ -898,6 +985,7 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
@@ -928,6 +1016,7 @@ export type UserUpdateWithoutFollowersInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -947,6 +1036,7 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -966,6 +1056,7 @@ export type UserCreateWithoutSubscriptionsInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -985,6 +1076,7 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -1009,6 +1101,7 @@ export type UserCreateWithoutSubscribersInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -1028,6 +1121,7 @@ export type UserUncheckedCreateWithoutSubscribersInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -1063,6 +1157,7 @@ export type UserUpdateWithoutSubscriptionsInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -1082,6 +1177,7 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -1112,6 +1208,7 @@ export type UserUpdateWithoutSubscribersInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -1131,6 +1228,7 @@ export type UserUncheckedUpdateWithoutSubscribersInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -1150,6 +1248,7 @@ export type UserCreateWithoutPaymentsInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -1169,6 +1268,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
@@ -1204,6 +1304,7 @@ export type UserUpdateWithoutPaymentsInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -1223,6 +1324,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
@@ -1318,6 +1420,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  subscriptionPrice?: boolean
   stats?: boolean | Prisma.User$statsArgs<ExtArgs>
   picks?: boolean | Prisma.User$picksArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
@@ -1339,6 +1442,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  subscriptionPrice?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1352,6 +1456,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  subscriptionPrice?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1365,9 +1470,10 @@ export type UserSelectScalar = {
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  subscriptionPrice?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "role" | "avatarUrl" | "bio" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "role" | "avatarUrl" | "bio" | "isVerified" | "createdAt" | "updatedAt" | "subscriptionPrice", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stats?: boolean | Prisma.User$statsArgs<ExtArgs>
   picks?: boolean | Prisma.User$picksArgs<ExtArgs>
@@ -1403,6 +1509,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isVerified: boolean
     createdAt: Date
     updatedAt: Date
+    subscriptionPrice: number | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1843,6 +1950,7 @@ export interface UserFieldRefs {
   readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly subscriptionPrice: Prisma.FieldRef<"User", 'Int'>
 }
     
 

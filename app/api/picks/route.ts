@@ -2,12 +2,12 @@ import prisma from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { getFixtureById } from "@/lib/api-football";
 import { NextRequest, NextResponse } from "next/server";
-import { PickStatus } from "../../../generated/prisma/client";
+import { $Enums, PickStatus } from "../../../generated/prisma/client";
 import { validatePickInput, PickInput } from "@/lib/pick-validator";
 
 // ── POST /api/picks — Publicar pronóstico ────────────────────────────
 export async function POST(req: NextRequest) {
-  return requireRole(req, "TIPSTER", async (authUser) => {
+  return requireRole(req, $Enums.Role.TIPSTER, async (authUser) => {
     const body: PickInput = await req.json();
 
     const {
@@ -149,7 +149,6 @@ export async function POST(req: NextRequest) {
 //   league     → filtrar por liga
 //   page       → paginación (default 1)
 //   limit      → resultados por página (default 20, max 50)
-
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
