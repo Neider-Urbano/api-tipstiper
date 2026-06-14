@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
-import { NextRequest, NextResponse } from "next/server";
 import { $Enums } from "@/generated/prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 interface UpdateProfileBody {
   bio?: string;

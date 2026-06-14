@@ -10,20 +10,27 @@ const VALID_ORDER_FIELDS: OrderByField[] = [
   "unitsWon",
 ];
 
+interface RankingSearchParams {
+  orderBy: OrderByField;
+  minPicks: number;
+  page: number;
+  limit: number;
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
-  const orderBy = (searchParams.get("orderBy") ?? "yield") as OrderByField;
-  const minPicks = Math.max(1, Number(searchParams.get("minPicks") ?? "10"));
-  const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
-  const limit = Math.min(
-    50,
-    Math.max(1, Number(searchParams.get("limit") ?? "20")),
-  );
-  const skip = (page - 1) * limit;
+  const filters: RankingSearchParams = {
+    orderBy: (searchParams.get("orderBy") ?? "yield") as OrderByField,
+    minPicks: Math.max(1, Number(searchParams.get("minPicks") ?? "10")),
+    page: Math.max(1, Number(searchParams.get("page") ?? "1")),
+    limit: Math.min(50, Math.max(1, Number(searchParams.get("limit") ?? "20"))),
+  };
+
+  const skip = (filters.page - 1) * filters.limit;
 
   // Validar campo de ordenamiento
-  if (!VALID_ORDER_FIELDS.includes(orderBy)) {
+  if (!VALID_ORDER_FIELDS.includes(filters.orderBy)) {
     return NextResponse.json(
       {
         success: false,
@@ -38,12 +45,12 @@ export async function GET(req: NextRequest) {
   const [tipsters, total] = await Promise.all([
     prisma.tipsterStats.findMany({
       where: {
-        totalPicks: { gte: minPicks },
+        totalPicks: { gte: filters.minPicks },
         user: { isVerified: true, role: $Enums.Role.TIPSTER },
       },
-      orderBy: { [orderBy]: "desc" },
+      orderBy: { [filters.orderBy]: "desc" },
       skip,
-      take: limit,
+      take: filters.limit,
       select: {
         yield: true,
         winRate: true,
@@ -60,7 +67,6 @@ export async function GET(req: NextRequest) {
             avatarUrl: true,
             bio: true,
             createdAt: true,
-            // Picks recientes para mostrar actividad
             picks: {
               where: { status: { in: ["WON", "LOST", "PENDING"] } },
               orderBy: { publishedAt: "desc" },
@@ -83,7 +89,7 @@ export async function GET(req: NextRequest) {
 
     prisma.tipsterStats.count({
       where: {
-        totalPicks: { gte: minPicks },
+        totalPicks: { gte: filters.minPicks },
         user: { isVerified: true, role: $Enums.Role.TIPSTER },
       },
     }),
@@ -101,14 +107,14 @@ export async function GET(req: NextRequest) {
       tipsters: rankedTipsters,
       pagination: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-        hasMore: page * limit < total,
+        page: filters.page,
+        limit: filters.limit,
+        totalPages: Math.ceil(total / filters.limit),
+        hasMore: filters.page * filters.limit < total,
       },
       meta: {
-        orderBy,
-        minPicks,
+        orderBy: filters.orderBy,
+        minPicks: filters.minPicks,
       },
     },
   });

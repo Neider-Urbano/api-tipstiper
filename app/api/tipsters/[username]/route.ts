@@ -4,17 +4,26 @@ import { getAuthUser } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { PickStatus } from "../../../../generated/prisma/client";
 
+interface TipsterProfileSearchParams {
+  picksPage: number;
+  picksLimit: number;
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { username: string } },
 ) {
   const { searchParams } = new URL(req.url);
-  const picksPage = Math.max(1, Number(searchParams.get("picksPage") ?? "1"));
-  const picksLimit = Math.min(
-    20,
-    Math.max(1, Number(searchParams.get("picksLimit") ?? "10")),
-  );
-  const picksSkip = (picksPage - 1) * picksLimit;
+
+  const filters: TipsterProfileSearchParams = {
+    picksPage: Math.max(1, Number(searchParams.get("picksPage") ?? "1")),
+    picksLimit: Math.min(
+      20,
+      Math.max(1, Number(searchParams.get("picksLimit") ?? "10")),
+    ),
+  };
+
+  const picksSkip = (filters.picksPage - 1) * filters.picksLimit;
 
   // Usuario autenticado (opcional — para mostrar análisis premium)
   const authUser = getAuthUser(req);
@@ -48,7 +57,7 @@ export async function GET(
       where: { tipsterId: user.id },
       orderBy: { publishedAt: "desc" },
       skip: picksSkip,
-      take: picksLimit,
+      take: filters.picksLimit,
       select: {
         id: true,
         matchDate: true,
@@ -62,7 +71,6 @@ export async function GET(
         isPremium: true,
         status: true,
         publishedAt: true,
-        // Ocultar análisis premium si no es el dueño
         analysis: true,
       },
     }),
@@ -131,10 +139,10 @@ export async function GET(
         items: picksWithAccess,
         pagination: {
           total: totalPicks,
-          page: picksPage,
-          limit: picksLimit,
-          totalPages: Math.ceil(totalPicks / picksLimit),
-          hasMore: picksPage * picksLimit < totalPicks,
+          page: filters.picksPage,
+          limit: filters.picksLimit,
+          totalPages: Math.ceil(totalPicks / filters.picksLimit),
+          hasMore: filters.picksPage * filters.picksLimit < totalPicks,
         },
       },
       monthlyPerformance,

@@ -1,6 +1,6 @@
-import { $Enums } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
+import { $Enums } from "@/generated/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 // ── POST — Seguir tipster ────────────────────────────────────────────

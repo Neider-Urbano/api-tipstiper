@@ -5,6 +5,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { $Enums, PickStatus } from "../../../generated/prisma/client";
 import { validatePickInput, PickInput } from "@/lib/pick-validator";
 
+interface PicksSearchParams {
+  tipsterId?: string;
+  status: PickStatus | null;
+  league?: string;
+  page: number;
+  limit: number;
+}
+
 // ── POST /api/picks — Publicar pronóstico ────────────────────────────
 export async function POST(req: NextRequest) {
   return requireRole(req, $Enums.Role.TIPSTER, async (authUser) => {
@@ -152,19 +160,20 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
-  const tipsterId = searchParams.get("tipsterId") ?? undefined;
-  const status = searchParams.get("status") as PickStatus | null;
-  const league = searchParams.get("league") ?? undefined;
-  const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
-  const limit = Math.min(
-    50,
-    Math.max(1, Number(searchParams.get("limit") ?? "20")),
-  );
-  const skip = (page - 1) * limit;
+  // 2. Extraemos y parseamos los parámetros centralizándolos en el objeto filters
+  const filters: PicksSearchParams = {
+    tipsterId: searchParams.get("tipsterId") ?? undefined,
+    status: searchParams.get("status") as PickStatus | null,
+    league: searchParams.get("league") ?? undefined,
+    page: Math.max(1, Number(searchParams.get("page") ?? "1")),
+    limit: Math.min(50, Math.max(1, Number(searchParams.get("limit") ?? "20"))),
+  };
+
+  const skip = (filters.page - 1) * filters.limit;
 
   // Validar status si viene
   const validStatuses = Object.values(PickStatus);
-  if (status && !validStatuses.includes(status)) {
+  if (filters.status && !validStatuses.includes(filters.status)) {
     return NextResponse.json(
       {
         success: false,
@@ -188,10 +197,10 @@ export async function GET(req: NextRequest) {
   }
 
   const where = {
-    ...(tipsterId && { tipsterId }),
-    ...(status && { status }),
-    ...(league && {
-      league: { contains: league, mode: "insensitive" as const },
+    ...(filters.tipsterId && { tipsterId: filters.tipsterId }),
+    ...(filters.status && { status: filters.status }),
+    ...(filters.league && {
+      league: { contains: filters.league, mode: "insensitive" as const },
     }),
   };
 
@@ -200,7 +209,7 @@ export async function GET(req: NextRequest) {
       where,
       orderBy: { publishedAt: "desc" },
       skip,
-      take: limit,
+      take: filters.limit,
       select: {
         id: true,
         matchId: true,
@@ -252,10 +261,10 @@ export async function GET(req: NextRequest) {
       picks: picksWithAccess,
       pagination: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-        hasMore: page * limit < total,
+        page: filters.page,
+        limit: filters.limit,
+        totalPages: Math.ceil(total / filters.limit),
+        hasMore: filters.page * filters.limit < total,
       },
     },
   });

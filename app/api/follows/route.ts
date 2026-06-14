@@ -3,21 +3,43 @@ import { requireAuth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { PickStatus } from "../../../generated/prisma/client";
 
+export enum FeedView {
+  TIPSTERS = "tipsters",
+  FEED = "feed",
+  BOTH = "both",
+}
+
+interface FeedSearchParams {
+  view: FeedView;
+  page: number;
+  limit: number;
+  status: PickStatus | null;
+}
+
 export async function GET(req: NextRequest) {
   return requireAuth(req, async (authUser) => {
     const { searchParams } = new URL(req.url);
 
-    const view = searchParams.get("view") ?? "both";
-    const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
-    const limit = Math.min(
-      50,
-      Math.max(1, Number(searchParams.get("limit") ?? "20")),
-    );
-    const status = searchParams.get("status") as PickStatus | null;
-    const skip = (page - 1) * limit;
+    // 2. Extraemos y parseamos garantizando que cumpla con la interfaz
+    const filters: FeedSearchParams = {
+      view: (searchParams.get("view") ?? "both") as FeedView,
+      page: Math.max(1, Number(searchParams.get("page") ?? "1")),
+      limit: Math.min(
+        50,
+        Math.max(1, Number(searchParams.get("limit") ?? "20")),
+      ),
+      status: searchParams.get("status") as PickStatus | null,
+    };
 
-    const validViews = ["tipsters", "feed", "both"];
-    if (!validViews.includes(view)) {
+    const skip = (filters.page - 1) * filters.limit;
+
+    const validViews: FeedView[] = [
+      FeedView.TIPSTERS,
+      FeedView.FEED,
+      FeedView.BOTH,
+    ];
+
+    if (!validViews.includes(filters.view)) {
       return NextResponse.json(
         {
           success: false,
@@ -51,7 +73,6 @@ export async function GET(req: NextRequest) {
                 unitsWon: true,
               },
             },
-            // Último pick para mostrar actividad reciente
             picks: {
               orderBy: { publishedAt: "desc" },
               take: 1,
@@ -76,7 +97,7 @@ export async function GET(req: NextRequest) {
             pagination: {
               total: 0,
               page: 1,
-              limit,
+              limit: filters.limit,
               totalPages: 0,
               hasMore: false,
             },
@@ -87,7 +108,7 @@ export async function GET(req: NextRequest) {
     }
 
     // ── Vista: solo tipsters ──────────────────────────────────────────
-    if (view === "tipsters") {
+    if (filters.view === FeedView.TIPSTERS) {
       return NextResponse.json({
         success: true,
         data: {
@@ -99,7 +120,7 @@ export async function GET(req: NextRequest) {
 
     // ── Vista: feed de picks ──────────────────────────────────────────
     const validStatuses = Object.values(PickStatus);
-    if (status && !validStatuses.includes(status)) {
+    if (filters.status && !validStatuses.includes(filters.status)) {
       return NextResponse.json(
         {
           success: false,
@@ -111,7 +132,7 @@ export async function GET(req: NextRequest) {
 
     const feedWhere = {
       tipsterId: { in: tipsterIds },
-      ...(status && { status }),
+      ...(filters.status && { status: filters.status }),
     };
 
     const [feedPicks, totalFeed] = await Promise.all([
@@ -119,7 +140,7 @@ export async function GET(req: NextRequest) {
         where: feedWhere,
         orderBy: { publishedAt: "desc" },
         skip,
-        take: limit,
+        take: filters.limit,
         select: {
           id: true,
           matchDate: true,
@@ -151,7 +172,6 @@ export async function GET(req: NextRequest) {
     ]);
 
     // Ocultar análisis premium
-    // En fase 2 aquí verificaremos si tiene suscripción activa
     const feedWithAccess = feedPicks.map((pick) => ({
       ...pick,
       analysis:
@@ -165,10 +185,10 @@ export async function GET(req: NextRequest) {
       items: feedWithAccess,
       pagination: {
         total: totalFeed,
-        page,
-        limit,
-        totalPages: Math.ceil(totalFeed / limit),
-        hasMore: page * limit < totalFeed,
+        page: filters.page,
+        limit: filters.limit,
+        totalPages: Math.ceil(totalFeed / filters.limit),
+        hasMore: filters.page * filters.limit < totalFeed,
       },
     };
 
@@ -176,8 +196,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        tipsters: view === "feed" ? undefined : follows.map((f) => f.tipster),
-        feed: view === "tipsters" ? undefined : feed,
+        tipsters:
+          filters.view === FeedView.FEED
+            ? undefined
+            : follows.map((f) => f.tipster),
+        feed: feed,
         totalFollowing: follows.length,
       },
     });

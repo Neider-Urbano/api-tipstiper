@@ -2,13 +2,20 @@ import { requireAuth } from "@/lib/auth";
 import { searchFixtures } from "@/lib/api-football";
 import { NextRequest, NextResponse } from "next/server";
 
+interface FilterSearchParams {
+  q: string;
+  date?: string;
+}
+
 export async function GET(req: NextRequest) {
   return requireAuth(req, async () => {
     const { searchParams } = new URL(req.url);
-    const q = searchParams.get("q")?.trim();
-    const date = searchParams.get("date") ?? undefined;
+    const filters: FilterSearchParams = {
+      q: searchParams.get("q")?.trim() ?? "",
+      date: searchParams.get("date") ?? undefined,
+    };
 
-    if (!q || q.length < 2) {
+    if (!filters.q || filters.q.length < 2) {
       return NextResponse.json(
         {
           success: false,
@@ -19,21 +26,21 @@ export async function GET(req: NextRequest) {
     }
 
     // Validar formato de fecha si viene
-    if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    if (filters.date && !/^\d{4}-\d{2}-\d{2}$/.test(filters.date)) {
       return NextResponse.json(
         { success: false, error: "Formato de fecha inválido. Usa YYYY-MM-DD" },
         { status: 400 },
       );
     }
 
-    const fixtures = await searchFixtures(q, date);
+    const fixtures = await searchFixtures(filters.q, filters.date);
 
     return NextResponse.json({
       success: true,
       data: {
         fixtures,
         total: fixtures.length,
-        query: q,
+        query: filters.q,
       },
     });
   });
