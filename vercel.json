@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/verify-picks",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
