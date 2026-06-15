@@ -1,8 +1,9 @@
 import prisma from "@/lib/prisma";
-import { $Enums } from "@/generated/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { $Enums, PickStatus } from "@/generated/prisma/client";
 
 type OrderByField = "yield" | "winRate" | "totalPicks" | "unitsWon";
+
 const VALID_ORDER_FIELDS: OrderByField[] = [
   "yield",
   "winRate",
@@ -68,7 +69,11 @@ export async function GET(req: NextRequest) {
             bio: true,
             createdAt: true,
             picks: {
-              where: { status: { in: ["WON", "LOST", "PENDING"] } },
+              where: {
+                status: {
+                  in: [PickStatus.WON, PickStatus.LOST, PickStatus.PENDING],
+                },
+              },
               orderBy: { publishedAt: "desc" },
               take: 5,
               select: {

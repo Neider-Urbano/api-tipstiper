@@ -6,11 +6,11 @@ import { $Enums, PickStatus } from "../../../generated/prisma/client";
 import { validatePickInput, PickInput } from "@/lib/pick-validator";
 
 interface PicksSearchParams {
-  tipsterId?: string;
-  status: PickStatus | null;
-  league?: string;
   page: number;
   limit: number;
+  league?: string;
+  tipsterId?: string;
+  status: PickStatus | null;
 }
 
 // ── POST /api/picks — Publicar pronóstico ────────────────────────────

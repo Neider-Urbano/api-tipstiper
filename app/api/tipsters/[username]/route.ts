@@ -1,6 +1,6 @@
-import { $Enums } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { getAuthUser } from "@/lib/auth";
+import { $Enums } from "@/generated/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { PickStatus } from "../../../../generated/prisma/client";
 
@@ -179,7 +179,7 @@ function buildMonthlyPerformance(picks: PickForChart[]) {
     const odds = Number(pick.odds);
     const stake = pick.stake;
 
-    if (pick.status === "WON") {
+    if (pick.status === PickStatus.WON) {
       months[key].won += 1;
       months[key].profit += stake * (odds - 1);
     } else {

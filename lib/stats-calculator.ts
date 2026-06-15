@@ -1,4 +1,5 @@
 import prisma from "./prisma";
+import { PickStatus } from "@/generated/prisma/enums";
 
 // Recalcula las estadísticas de un tipster desde cero
 // basándose en todos sus picks verificados (WON / LOST).
@@ -11,7 +12,7 @@ export async function recalculateTipsterStats(
   const picks = await prisma.pick.findMany({
     where: {
       tipsterId,
-      status: { in: ["WON", "LOST"] },
+      status: { in: [PickStatus.WON, PickStatus.LOST] },
     },
     select: {
       status: true,
@@ -40,7 +41,7 @@ export async function recalculateTipsterStats(
     return;
   }
 
-  const wonPicks = picks.filter((p) => p.status === "WON").length;
+  const wonPicks = picks.filter((p) => p.status === PickStatus.WON).length;
 
   // Calcular profit y total apostado para yield
   // Yield = (profit total / total stake apostado) * 100
@@ -53,7 +54,7 @@ export async function recalculateTipsterStats(
 
     totalStake += stake;
     profit +=
-      pick.status === "WON"
+      pick.status === PickStatus.WON
         ? stake * (odds - 1) // ganancia neta
         : -stake; // pérdida
   });
@@ -69,7 +70,7 @@ export async function recalculateTipsterStats(
   // Calcular racha actual
   // Ordenar por publishedAt desc para leer la racha desde el pick más reciente
   const recentPicks = await prisma.pick.findMany({
-    where: { tipsterId, status: { in: ["WON", "LOST"] } },
+    where: { tipsterId, status: { in: [PickStatus.WON, PickStatus.LOST] } },
     orderBy: { publishedAt: "desc" },
     select: { status: true },
   });
@@ -79,7 +80,7 @@ export async function recalculateTipsterStats(
 
   for (const pick of recentPicks) {
     if (pick.status === firstStatus) {
-      streak += pick.status === "WON" ? 1 : -1;
+      streak += pick.status === PickStatus.WON ? 1 : -1;
     } else {
       break; // la racha se rompió
     }
