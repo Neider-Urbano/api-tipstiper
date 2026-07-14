@@ -2,8 +2,11 @@ import prisma from "@/lib/prisma";
 import { getFixtureById } from "@/lib/api-football";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyPickResult } from "@/lib/pick-validator";
-import { recalculateTipsterStats } from "@/lib/stats-calculator";
 import { PickStatus } from "../../../../generated/prisma/client";
+import {
+  recalculateBettorStats,
+  recalculateTipsterStats,
+} from "@/lib/stats-calculator";
 
 // Se ejecuta automáticamente cada hora via Vercel Cron.
 // Configuración en vercel.json:
@@ -31,7 +34,8 @@ export async function GET(req: NextRequest) {
   const result = {
     locked: 0, // picks bloqueados (partido por empezar)
     verified: 0, // picks verificados (WON / LOST / VOID)
-    statsUpdated: 0, // tipsters con stats recalculadas
+    tipsterStatsUpdated: 0, // tipsters con stats recalculadas
+    bettorStatsUpdated: 0, // bettors con stats recalculadas
     errors: [] as string[],
   };
 
@@ -113,6 +117,7 @@ export async function GET(req: NextRequest) {
 
     // ── PASO 4: Verificar cada pick contra el resultado real ──────────
     const tipstersTouched = new Set<string>();
+    const picksTouched = new Set<string>();
 
     for (const pick of pendingVerification) {
       const fixture = fixtureMap[pick.matchId];
@@ -139,6 +144,7 @@ export async function GET(req: NextRequest) {
 
         result.verified++;
         tipstersTouched.add(pick.tipsterId);
+        picksTouched.add(pick.id);
       } catch (err) {
         result.errors.push(
           `Error actualizando pick ${pick.id}: ${err instanceof Error ? err.message : "unknown"}`,
@@ -152,7 +158,7 @@ export async function GET(req: NextRequest) {
     for (const tipsterId of tipstersTouched) {
       try {
         await recalculateTipsterStats(tipsterId);
-        result.statsUpdated++;
+        result.tipsterStatsUpdated++;
       } catch (err) {
         result.errors.push(
           `Error recalculando stats de tipster ${tipsterId}: ${err instanceof Error ? err.message : "unknown"}`,
@@ -160,11 +166,41 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    const bettorIds = new Set(
+      (
+        await prisma.bettorPick.findMany({
+          where: {
+            pickId: {
+              in: [...picksTouched],
+            },
+          },
+          select: {
+            bettorId: true,
+          },
+        })
+      ).map((b) => b.bettorId),
+    );
+
+    const bettorResults = await Promise.allSettled(
+      [...bettorIds].map((bettorId) => recalculateBettorStats(bettorId)),
+    );
+
+    bettorResults.forEach((res, index) => {
+      const bettorId = [...bettorIds][index];
+      if (res.status === "fulfilled") {
+        result.bettorStatsUpdated++;
+      } else {
+        result.errors.push(
+          `Error recalculando stats de bettor ${bettorId}: ${res.reason instanceof Error ? res.reason.message : "unknown"}`,
+        );
+      }
+    });
+
     const duration = Date.now() - startTime;
 
     // Log para Vercel — visible en el dashboard de logs
     console.log(
-      `[CRON verify-picks] locked=${result.locked} verified=${result.verified} stats=${result.statsUpdated} errors=${result.errors.length} duration=${duration}ms`,
+      `[CRON verify-picks] locked=${result.locked} verified=${result.verified} stats=${result.tipsterStatsUpdated} errors=${result.errors.length} duration=${duration}ms`,
     );
 
     return NextResponse.json({

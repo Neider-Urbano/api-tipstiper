@@ -265,7 +265,9 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   subscriptionPrice?: Prisma.IntNullableFilter<"User"> | number | null
   stats?: Prisma.XOR<Prisma.TipsterStatsNullableScalarRelationFilter, Prisma.TipsterStatsWhereInput> | null
+  bettorStats?: Prisma.XOR<Prisma.BettorStatsNullableScalarRelationFilter, Prisma.BettorStatsWhereInput> | null
   picks?: Prisma.PickListRelationFilter
+  bettorPicks?: Prisma.BettorPickListRelationFilter
   following?: Prisma.FollowListRelationFilter
   followers?: Prisma.FollowListRelationFilter
   subscriptions?: Prisma.SubscriptionListRelationFilter
@@ -286,7 +288,9 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   subscriptionPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   stats?: Prisma.TipsterStatsOrderByWithRelationInput
+  bettorStats?: Prisma.BettorStatsOrderByWithRelationInput
   picks?: Prisma.PickOrderByRelationAggregateInput
+  bettorPicks?: Prisma.BettorPickOrderByRelationAggregateInput
   following?: Prisma.FollowOrderByRelationAggregateInput
   followers?: Prisma.FollowOrderByRelationAggregateInput
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
@@ -310,7 +314,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   subscriptionPrice?: Prisma.IntNullableFilter<"User"> | number | null
   stats?: Prisma.XOR<Prisma.TipsterStatsNullableScalarRelationFilter, Prisma.TipsterStatsWhereInput> | null
+  bettorStats?: Prisma.XOR<Prisma.BettorStatsNullableScalarRelationFilter, Prisma.BettorStatsWhereInput> | null
   picks?: Prisma.PickListRelationFilter
+  bettorPicks?: Prisma.BettorPickListRelationFilter
   following?: Prisma.FollowListRelationFilter
   followers?: Prisma.FollowListRelationFilter
   subscriptions?: Prisma.SubscriptionListRelationFilter
@@ -367,7 +373,9 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
@@ -388,7 +396,9 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
@@ -409,7 +419,9 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
@@ -430,7 +442,9 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
@@ -661,6 +675,34 @@ export type UserUpdateOneRequiredWithoutPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPaymentsInput, Prisma.UserUpdateWithoutPaymentsInput>, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
 }
 
+export type UserCreateNestedOneWithoutBettorPicksInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBettorPicksInput, Prisma.UserUncheckedCreateWithoutBettorPicksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBettorPicksInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBettorPicksNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBettorPicksInput, Prisma.UserUncheckedCreateWithoutBettorPicksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBettorPicksInput
+  upsert?: Prisma.UserUpsertWithoutBettorPicksInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBettorPicksInput, Prisma.UserUpdateWithoutBettorPicksInput>, Prisma.UserUncheckedUpdateWithoutBettorPicksInput>
+}
+
+export type UserCreateNestedOneWithoutBettorStatsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBettorStatsInput, Prisma.UserUncheckedCreateWithoutBettorStatsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBettorStatsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBettorStatsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBettorStatsInput, Prisma.UserUncheckedCreateWithoutBettorStatsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBettorStatsInput
+  upsert?: Prisma.UserUpsertWithoutBettorStatsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBettorStatsInput, Prisma.UserUpdateWithoutBettorStatsInput>, Prisma.UserUncheckedUpdateWithoutBettorStatsInput>
+}
+
 export type UserCreateWithoutStatsInput = {
   id?: string
   email: string
@@ -673,7 +715,9 @@ export type UserCreateWithoutStatsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptionPrice?: number | null
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
@@ -693,7 +737,9 @@ export type UserUncheckedCreateWithoutStatsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptionPrice?: number | null
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
@@ -729,7 +775,9 @@ export type UserUpdateWithoutStatsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
@@ -749,7 +797,9 @@ export type UserUncheckedUpdateWithoutStatsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
@@ -770,6 +820,8 @@ export type UserCreateWithoutPicksInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
@@ -790,6 +842,8 @@ export type UserUncheckedCreateWithoutPicksInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
@@ -826,6 +880,8 @@ export type UserUpdateWithoutPicksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
@@ -846,6 +902,8 @@ export type UserUncheckedUpdateWithoutPicksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
@@ -866,7 +924,9 @@ export type UserCreateWithoutFollowingInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
   subscribers?: Prisma.SubscriptionCreateNestedManyWithoutTipsterInput
@@ -886,7 +946,9 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
   subscribers?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutTipsterInput
@@ -911,7 +973,9 @@ export type UserCreateWithoutFollowersInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
   subscribers?: Prisma.SubscriptionCreateNestedManyWithoutTipsterInput
@@ -931,7 +995,9 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
   subscribers?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutTipsterInput
@@ -967,7 +1033,9 @@ export type UserUpdateWithoutFollowingInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
   subscribers?: Prisma.SubscriptionUpdateManyWithoutTipsterNestedInput
@@ -987,7 +1055,9 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
   subscribers?: Prisma.SubscriptionUncheckedUpdateManyWithoutTipsterNestedInput
@@ -1018,7 +1088,9 @@ export type UserUpdateWithoutFollowersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
   subscribers?: Prisma.SubscriptionUpdateManyWithoutTipsterNestedInput
@@ -1038,7 +1110,9 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
   subscribers?: Prisma.SubscriptionUncheckedUpdateManyWithoutTipsterNestedInput
@@ -1058,7 +1132,9 @@ export type UserCreateWithoutSubscriptionsInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
   subscribers?: Prisma.SubscriptionCreateNestedManyWithoutTipsterInput
@@ -1078,7 +1154,9 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
   subscribers?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutTipsterInput
@@ -1103,7 +1181,9 @@ export type UserCreateWithoutSubscribersInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
@@ -1123,7 +1203,9 @@ export type UserUncheckedCreateWithoutSubscribersInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
@@ -1159,7 +1241,9 @@ export type UserUpdateWithoutSubscriptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
   subscribers?: Prisma.SubscriptionUpdateManyWithoutTipsterNestedInput
@@ -1179,7 +1263,9 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
   subscribers?: Prisma.SubscriptionUncheckedUpdateManyWithoutTipsterNestedInput
@@ -1210,7 +1296,9 @@ export type UserUpdateWithoutSubscribersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
@@ -1230,7 +1318,9 @@ export type UserUncheckedUpdateWithoutSubscribersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
@@ -1250,7 +1340,9 @@ export type UserCreateWithoutPaymentsInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
   picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
@@ -1270,7 +1362,9 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   updatedAt?: Date | string
   subscriptionPrice?: number | null
   stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
   picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
@@ -1306,7 +1400,9 @@ export type UserUpdateWithoutPaymentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
@@ -1326,11 +1422,221 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
+  picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
+  subscribers?: Prisma.SubscriptionUncheckedUpdateManyWithoutTipsterNestedInput
+}
+
+export type UserCreateWithoutBettorPicksInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  role: $Enums.Role
+  avatarUrl?: string | null
+  bio?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptionPrice?: number | null
+  stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsCreateNestedOneWithoutUserInput
+  picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
+  subscribers?: Prisma.SubscriptionCreateNestedManyWithoutTipsterInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutTipsterInput
+}
+
+export type UserUncheckedCreateWithoutBettorPicksInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  role: $Enums.Role
+  avatarUrl?: string | null
+  bio?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptionPrice?: number | null
+  stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  bettorStats?: Prisma.BettorStatsUncheckedCreateNestedOneWithoutUserInput
+  picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
+  subscribers?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutTipsterInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTipsterInput
+}
+
+export type UserCreateOrConnectWithoutBettorPicksInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBettorPicksInput, Prisma.UserUncheckedCreateWithoutBettorPicksInput>
+}
+
+export type UserUpsertWithoutBettorPicksInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBettorPicksInput, Prisma.UserUncheckedUpdateWithoutBettorPicksInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBettorPicksInput, Prisma.UserUncheckedCreateWithoutBettorPicksInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBettorPicksInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBettorPicksInput, Prisma.UserUncheckedUpdateWithoutBettorPicksInput>
+}
+
+export type UserUpdateWithoutBettorPicksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUpdateOneWithoutUserNestedInput
+  picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
+  subscribers?: Prisma.SubscriptionUpdateManyWithoutTipsterNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutTipsterNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBettorPicksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  bettorStats?: Prisma.BettorStatsUncheckedUpdateOneWithoutUserNestedInput
   picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
   subscribers?: Prisma.SubscriptionUncheckedUpdateManyWithoutTipsterNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTipsterNestedInput
+}
+
+export type UserCreateWithoutBettorStatsInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  role: $Enums.Role
+  avatarUrl?: string | null
+  bio?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptionPrice?: number | null
+  stats?: Prisma.TipsterStatsCreateNestedOneWithoutUserInput
+  picks?: Prisma.PickCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickCreateNestedManyWithoutBettorInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowCreateNestedManyWithoutTipsterInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutBettorInput
+  subscribers?: Prisma.SubscriptionCreateNestedManyWithoutTipsterInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutTipsterInput
+}
+
+export type UserUncheckedCreateWithoutBettorStatsInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  role: $Enums.Role
+  avatarUrl?: string | null
+  bio?: string | null
+  isVerified?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscriptionPrice?: number | null
+  stats?: Prisma.TipsterStatsUncheckedCreateNestedOneWithoutUserInput
+  picks?: Prisma.PickUncheckedCreateNestedManyWithoutTipsterInput
+  bettorPicks?: Prisma.BettorPickUncheckedCreateNestedManyWithoutBettorInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutTipsterInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutBettorInput
+  subscribers?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutTipsterInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTipsterInput
+}
+
+export type UserCreateOrConnectWithoutBettorStatsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBettorStatsInput, Prisma.UserUncheckedCreateWithoutBettorStatsInput>
+}
+
+export type UserUpsertWithoutBettorStatsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBettorStatsInput, Prisma.UserUncheckedUpdateWithoutBettorStatsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBettorStatsInput, Prisma.UserUncheckedCreateWithoutBettorStatsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBettorStatsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBettorStatsInput, Prisma.UserUncheckedUpdateWithoutBettorStatsInput>
+}
+
+export type UserUpdateWithoutBettorStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stats?: Prisma.TipsterStatsUpdateOneWithoutUserNestedInput
+  picks?: Prisma.PickUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUpdateManyWithoutBettorNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutTipsterNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutBettorNestedInput
+  subscribers?: Prisma.SubscriptionUpdateManyWithoutTipsterNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutTipsterNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBettorStatsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscriptionPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  stats?: Prisma.TipsterStatsUncheckedUpdateOneWithoutUserNestedInput
+  picks?: Prisma.PickUncheckedUpdateManyWithoutTipsterNestedInput
+  bettorPicks?: Prisma.BettorPickUncheckedUpdateManyWithoutBettorNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutTipsterNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutBettorNestedInput
+  subscribers?: Prisma.SubscriptionUncheckedUpdateManyWithoutTipsterNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTipsterNestedInput
 }
 
 
@@ -1340,6 +1646,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
 
 export type UserCountOutputType = {
   picks: number
+  bettorPicks: number
   following: number
   followers: number
   subscriptions: number
@@ -1349,6 +1656,7 @@ export type UserCountOutputType = {
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   picks?: boolean | UserCountOutputTypeCountPicksArgs
+  bettorPicks?: boolean | UserCountOutputTypeCountBettorPicksArgs
   following?: boolean | UserCountOutputTypeCountFollowingArgs
   followers?: boolean | UserCountOutputTypeCountFollowersArgs
   subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
@@ -1371,6 +1679,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type UserCountOutputTypeCountPicksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PickWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBettorPicksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BettorPickWhereInput
 }
 
 /**
@@ -1422,7 +1737,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   subscriptionPrice?: boolean
   stats?: boolean | Prisma.User$statsArgs<ExtArgs>
+  bettorStats?: boolean | Prisma.User$bettorStatsArgs<ExtArgs>
   picks?: boolean | Prisma.User$picksArgs<ExtArgs>
+  bettorPicks?: boolean | Prisma.User$bettorPicksArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
@@ -1476,7 +1793,9 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "role" | "avatarUrl" | "bio" | "isVerified" | "createdAt" | "updatedAt" | "subscriptionPrice", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stats?: boolean | Prisma.User$statsArgs<ExtArgs>
+  bettorStats?: boolean | Prisma.User$bettorStatsArgs<ExtArgs>
   picks?: boolean | Prisma.User$picksArgs<ExtArgs>
+  bettorPicks?: boolean | Prisma.User$bettorPicksArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
@@ -1491,7 +1810,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     stats: Prisma.$TipsterStatsPayload<ExtArgs> | null
+    bettorStats: Prisma.$BettorStatsPayload<ExtArgs> | null
     picks: Prisma.$PickPayload<ExtArgs>[]
+    bettorPicks: Prisma.$BettorPickPayload<ExtArgs>[]
     following: Prisma.$FollowPayload<ExtArgs>[]
     followers: Prisma.$FollowPayload<ExtArgs>[]
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
@@ -1905,7 +2226,9 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stats<T extends Prisma.User$statsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$statsArgs<ExtArgs>>): Prisma.Prisma__TipsterStatsClient<runtime.Types.Result.GetResult<Prisma.$TipsterStatsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  bettorStats<T extends Prisma.User$bettorStatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bettorStatsArgs<ExtArgs>>): Prisma.Prisma__BettorStatsClient<runtime.Types.Result.GetResult<Prisma.$BettorStatsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   picks<T extends Prisma.User$picksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$picksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bettorPicks<T extends Prisma.User$bettorPicksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bettorPicksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BettorPickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   following<T extends Prisma.User$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   followers<T extends Prisma.User$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptions<T extends Prisma.User$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2363,6 +2686,25 @@ export type User$statsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
 }
 
 /**
+ * User.bettorStats
+ */
+export type User$bettorStatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BettorStats
+   */
+  select?: Prisma.BettorStatsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BettorStats
+   */
+  omit?: Prisma.BettorStatsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BettorStatsInclude<ExtArgs> | null
+  where?: Prisma.BettorStatsWhereInput
+}
+
+/**
  * User.picks
  */
 export type User$picksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2384,6 +2726,30 @@ export type User$picksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.PickScalarFieldEnum | Prisma.PickScalarFieldEnum[]
+}
+
+/**
+ * User.bettorPicks
+ */
+export type User$bettorPicksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BettorPick
+   */
+  select?: Prisma.BettorPickSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BettorPick
+   */
+  omit?: Prisma.BettorPickOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BettorPickInclude<ExtArgs> | null
+  where?: Prisma.BettorPickWhereInput
+  orderBy?: Prisma.BettorPickOrderByWithRelationInput | Prisma.BettorPickOrderByWithRelationInput[]
+  cursor?: Prisma.BettorPickWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BettorPickScalarFieldEnum | Prisma.BettorPickScalarFieldEnum[]
 }
 
 /**

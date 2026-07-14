@@ -47,3 +47,13 @@ export type Subscription = Prisma.SubscriptionModel
  * 
  */
 export type Payment = Prisma.PaymentModel
+/**
+ * Model BettorPick
+ * 
+ */
+export type BettorPick = Prisma.BettorPickModel
+/**
+ * Model BettorStats
+ * 
+ */
+export type BettorStats = Prisma.BettorStatsModel

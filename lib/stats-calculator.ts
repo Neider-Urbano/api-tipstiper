@@ -1,5 +1,5 @@
 import prisma from "./prisma";
-import { PickStatus } from "@/generated/prisma/enums";
+import { PickStatus, SubStatus } from "@/generated/prisma/enums";
 
 // Recalcula las estadísticas de un tipster desde cero
 // basándose en todos sus picks verificados (WON / LOST).
@@ -60,12 +60,16 @@ export async function recalculateTipsterStats(
   });
 
   const yieldPct =
-    totalStake > 0 ? parseFloat(((profit / totalStake) * 100).toFixed(2)) : 0;
+    totalStake > 0
+      ? Number.parseFloat(((profit / totalStake) * 100).toFixed(2))
+      : 0;
 
   const roi =
-    totalStake > 0 ? parseFloat(((profit / totalPicks) * 100).toFixed(2)) : 0;
+    totalStake > 0
+      ? Number.parseFloat(((profit / totalPicks) * 100).toFixed(2))
+      : 0;
 
-  const winRate = parseFloat(((wonPicks / totalPicks) * 100).toFixed(2));
+  const winRate = Number.parseFloat(((wonPicks / totalPicks) * 100).toFixed(2));
 
   // Calcular racha actual
   // Ordenar por publishedAt desc para leer la racha desde el pick más reciente
@@ -93,7 +97,7 @@ export async function recalculateTipsterStats(
       wonPicks,
       yield: yieldPct,
       roi,
-      unitsWon: parseFloat(profit.toFixed(2)),
+      unitsWon: Number.parseFloat(profit.toFixed(2)),
       winRate,
       streak,
     },
@@ -103,9 +107,109 @@ export async function recalculateTipsterStats(
       wonPicks,
       yield: yieldPct,
       roi,
-      unitsWon: parseFloat(profit.toFixed(2)),
+      unitsWon: Number.parseFloat(profit.toFixed(2)),
       winRate,
       streak,
+    },
+  });
+}
+
+export async function recalculateBettorStats(bettorId: string) {
+  const now = new Date();
+
+  const firstDayOfMonth = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    1,
+    0,
+    0,
+    0,
+  );
+
+  const [activeSubscriptions, newSubscriptionsThisMonth, bettorPicks] =
+    await Promise.all([
+      prisma.subscription.count({
+        where: {
+          bettorId,
+          status: SubStatus.ACTIVE,
+        },
+      }),
+
+      prisma.subscription.count({
+        where: {
+          bettorId,
+          startedAt: {
+            gte: firstDayOfMonth,
+          },
+        },
+      }),
+
+      prisma.bettorPick.findMany({
+        where: {
+          bettorId,
+        },
+        include: {
+          pick: {
+            select: {
+              status: true,
+            },
+          },
+        },
+      }),
+    ]);
+
+  const followedPicks = bettorPicks.length;
+
+  const resolvedPicks = bettorPicks.filter(
+    (p) =>
+      p.pick.status === PickStatus.WON || p.pick.status === PickStatus.LOST,
+  );
+
+  const wonPicks = resolvedPicks.filter(
+    (p) => p.pick.status === PickStatus.WON,
+  ).length;
+
+  const followedWinRate =
+    resolvedPicks.length > 0 ? (wonPicks / resolvedPicks.length) * 100 : 0;
+
+  let invested = 0;
+  let profit = 0;
+
+  for (const item of resolvedPicks) {
+    const stake = Number(item.stake);
+    const odds = Number(item.odds);
+
+    invested += stake;
+
+    if (item.pick.status === PickStatus.WON) {
+      profit += stake * (odds - 1);
+    } else {
+      profit -= stake;
+    }
+  }
+
+  const roi = invested > 0 ? (profit / invested) * 100 : 0;
+
+  await prisma.bettorStats.upsert({
+    where: {
+      userId: bettorId,
+    },
+    update: {
+      activeSubscriptions,
+      newSubscriptionsThisMonth,
+      followedPicks,
+      totalProfitLoss: Number.parseFloat(profit.toFixed(2)),
+      roi: Number.parseFloat(roi.toFixed(2)),
+      followedWinRate: Number.parseFloat(followedWinRate.toFixed(2)),
+    },
+    create: {
+      userId: bettorId,
+      activeSubscriptions,
+      newSubscriptionsThisMonth,
+      followedPicks,
+      totalProfitLoss: Number.parseFloat(profit.toFixed(2)),
+      roi: Number.parseFloat(roi.toFixed(2)),
+      followedWinRate: Number.parseFloat(followedWinRate.toFixed(2)),
     },
   });
 }

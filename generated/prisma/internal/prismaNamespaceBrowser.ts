@@ -56,7 +56,9 @@ export const ModelName = {
   Pick: 'Pick',
   Follow: 'Follow',
   Subscription: 'Subscription',
-  Payment: 'Payment'
+  Payment: 'Payment',
+  BettorPick: 'BettorPick',
+  BettorStats: 'BettorStats'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -171,6 +173,35 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const BettorPickScalarFieldEnum = {
+  id: 'id',
+  bettorId: 'bettorId',
+  pickId: 'pickId',
+  odds: 'odds',
+  stake: 'stake',
+  result: 'result',
+  profit: 'profit',
+  createdAt: 'createdAt'
+} as const
+
+export type BettorPickScalarFieldEnum = (typeof BettorPickScalarFieldEnum)[keyof typeof BettorPickScalarFieldEnum]
+
+
+export const BettorStatsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  activeSubscriptions: 'activeSubscriptions',
+  newSubscriptionsThisMonth: 'newSubscriptionsThisMonth',
+  followedPicks: 'followedPicks',
+  totalProfitLoss: 'totalProfitLoss',
+  roi: 'roi',
+  followedWinRate: 'followedWinRate',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BettorStatsScalarFieldEnum = (typeof BettorStatsScalarFieldEnum)[keyof typeof BettorStatsScalarFieldEnum]
 
 
 export const SortOrder = {

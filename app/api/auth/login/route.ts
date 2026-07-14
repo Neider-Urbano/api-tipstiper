@@ -23,8 +23,13 @@ export async function POST(req: NextRequest) {
         email: true,
         username: true,
         role: true,
+        avatarUrl: true,
+        bio: true,
         password: true, // solo aquí, nunca lo devolvemos
         isVerified: true,
+        createdAt: true,
+        updatedAt: true,
+        subscriptionPrice: true,
       },
     });
 

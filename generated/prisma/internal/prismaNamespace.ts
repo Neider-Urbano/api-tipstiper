@@ -389,7 +389,9 @@ export const ModelName = {
   Pick: 'Pick',
   Follow: 'Follow',
   Subscription: 'Subscription',
-  Payment: 'Payment'
+  Payment: 'Payment',
+  BettorPick: 'BettorPick',
+  BettorStats: 'BettorStats'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "tipsterStats" | "pick" | "follow" | "subscription" | "payment"
+    modelProps: "user" | "tipsterStats" | "pick" | "follow" | "subscription" | "payment" | "bettorPick" | "bettorStats"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +855,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BettorPick: {
+      payload: Prisma.$BettorPickPayload<ExtArgs>
+      fields: Prisma.BettorPickFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BettorPickFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BettorPickFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>
+        }
+        findFirst: {
+          args: Prisma.BettorPickFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BettorPickFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>
+        }
+        findMany: {
+          args: Prisma.BettorPickFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>[]
+        }
+        create: {
+          args: Prisma.BettorPickCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>
+        }
+        createMany: {
+          args: Prisma.BettorPickCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BettorPickCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>[]
+        }
+        delete: {
+          args: Prisma.BettorPickDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>
+        }
+        update: {
+          args: Prisma.BettorPickUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>
+        }
+        deleteMany: {
+          args: Prisma.BettorPickDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BettorPickUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BettorPickUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>[]
+        }
+        upsert: {
+          args: Prisma.BettorPickUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorPickPayload>
+        }
+        aggregate: {
+          args: Prisma.BettorPickAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBettorPick>
+        }
+        groupBy: {
+          args: Prisma.BettorPickGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BettorPickGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BettorPickCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BettorPickCountAggregateOutputType> | number
+        }
+      }
+    }
+    BettorStats: {
+      payload: Prisma.$BettorStatsPayload<ExtArgs>
+      fields: Prisma.BettorStatsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BettorStatsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BettorStatsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>
+        }
+        findFirst: {
+          args: Prisma.BettorStatsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BettorStatsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>
+        }
+        findMany: {
+          args: Prisma.BettorStatsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>[]
+        }
+        create: {
+          args: Prisma.BettorStatsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>
+        }
+        createMany: {
+          args: Prisma.BettorStatsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BettorStatsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>[]
+        }
+        delete: {
+          args: Prisma.BettorStatsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>
+        }
+        update: {
+          args: Prisma.BettorStatsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>
+        }
+        deleteMany: {
+          args: Prisma.BettorStatsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BettorStatsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BettorStatsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>[]
+        }
+        upsert: {
+          args: Prisma.BettorStatsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettorStatsPayload>
+        }
+        aggregate: {
+          args: Prisma.BettorStatsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBettorStats>
+        }
+        groupBy: {
+          args: Prisma.BettorStatsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BettorStatsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BettorStatsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BettorStatsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -988,6 +1138,35 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const BettorPickScalarFieldEnum = {
+  id: 'id',
+  bettorId: 'bettorId',
+  pickId: 'pickId',
+  odds: 'odds',
+  stake: 'stake',
+  result: 'result',
+  profit: 'profit',
+  createdAt: 'createdAt'
+} as const
+
+export type BettorPickScalarFieldEnum = (typeof BettorPickScalarFieldEnum)[keyof typeof BettorPickScalarFieldEnum]
+
+
+export const BettorStatsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  activeSubscriptions: 'activeSubscriptions',
+  newSubscriptionsThisMonth: 'newSubscriptionsThisMonth',
+  followedPicks: 'followedPicks',
+  totalProfitLoss: 'totalProfitLoss',
+  roi: 'roi',
+  followedWinRate: 'followedWinRate',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BettorStatsScalarFieldEnum = (typeof BettorStatsScalarFieldEnum)[keyof typeof BettorStatsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1268,6 +1447,8 @@ export type GlobalOmitConfig = {
   follow?: Prisma.FollowOmit
   subscription?: Prisma.SubscriptionOmit
   payment?: Prisma.PaymentOmit
+  bettorPick?: Prisma.BettorPickOmit
+  bettorStats?: Prisma.BettorStatsOmit
 }
 
 /* Types for Logging */

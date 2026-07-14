@@ -56,11 +56,17 @@ model User {
   subscriptionPrice Int?
   
   stats         TipsterStats?
+  bettorStats   BettorStats?
+
   picks         Pick[]
+  bettorPicks   BettorPick[]
+
   following     Follow[]       @relation("Follower")
   followers     Follow[]       @relation("Tipster")
+  
   subscriptions Subscription[] @relation("Bettor")
   subscribers   Subscription[] @relation("TipsterSub")
+  
   payments      Payment[]
 
   @@map("users")
@@ -109,6 +115,8 @@ model Pick {
   status      PickStatus @default(PENDING)
   publishedAt DateTime   @default(now())
   lockedAt    DateTime?
+
+  followers BettorPick[]
 
   @@index([tipsterId])
   @@index([status])
@@ -174,4 +182,48 @@ model Payment {
   @@index([tipsterId])
   @@index([subscriptionId])
   @@map("payments")
+}
+
+// ─── BETTOR PICKS ────────────────────────────────────────
+
+model BettorPick {
+  id        String @id @default(uuid())
+  bettorId  String
+  bettor    User   @relation(fields: [bettorId], references: [id], onDelete: Cascade)
+
+  pickId    String
+  pick      Pick   @relation(fields: [pickId], references: [id], onDelete: Cascade)
+
+  odds      Decimal @db.Decimal(6,2)
+  stake     Int
+  result    PickStatus?
+  profit    Decimal @default(0) @db.Decimal(12,2)
+
+  createdAt DateTime @default(now())
+
+  @@unique([bettorId,pickId])
+
+  @@index([bettorId])
+  @@index([pickId])
+
+  @@map("bettor_picks")
+}
+
+// ─── BETTOR STATS ────────────────────────────────────────
+
+model BettorStats {
+  id String @id @default(uuid())
+  userId String @unique
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+
+  activeSubscriptions Int @default(0)
+  newSubscriptionsThisMonth Int @default(0)
+  followedPicks Int @default(0)
+  totalProfitLoss Decimal @default(0) @db.Decimal(12,2)
+  roi Decimal @default(0) @db.Decimal(8,2)
+  followedWinRate Decimal @default(0) @db.Decimal(5,2)
+
+  updatedAt DateTime @updatedAt
+
+  @@map("bettor_stats")
 }

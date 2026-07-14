@@ -11,9 +11,10 @@ interface TipsterProfileSearchParams {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { username: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
   const { searchParams } = new URL(req.url);
+  const { id } = await context.params;
 
   const filters: TipsterProfileSearchParams = {
     picksPage: Math.max(1, Number(searchParams.get("picksPage") ?? "1")),
@@ -30,7 +31,7 @@ export async function GET(
   const currentUserId = authUser?.userId ?? null;
 
   const user = await prisma.user.findUnique({
-    where: { username: params.username.toLowerCase() },
+    where: { id },
     select: {
       id: true,
       username: true,

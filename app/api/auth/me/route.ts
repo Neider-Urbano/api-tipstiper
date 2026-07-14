@@ -15,8 +15,8 @@ export async function GET(req: NextRequest) {
         bio: true,
         isVerified: true,
         createdAt: true,
-        // Si es tipster, traer sus stats
-        stats: true,
+        updatedAt: true,
+        subscriptionPrice: true,
       },
     });
 

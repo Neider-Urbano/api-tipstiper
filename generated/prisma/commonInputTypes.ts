@@ -297,6 +297,23 @@ export type EnumPayStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPayStatusFilter<$PrismaModel>
 }
 
+export type EnumPickStatusNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.PickStatus | Prisma.EnumPickStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.PickStatus[] | Prisma.ListEnumPickStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.PickStatus[] | Prisma.ListEnumPickStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPickStatusNullableFilter<$PrismaModel> | $Enums.PickStatus | null
+}
+
+export type EnumPickStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PickStatus | Prisma.EnumPickStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.PickStatus[] | Prisma.ListEnumPickStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.PickStatus[] | Prisma.ListEnumPickStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPickStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.PickStatus | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPickStatusNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPickStatusNullableFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -591,6 +608,23 @@ export type NestedEnumPayStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPayStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPayStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumPickStatusNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.PickStatus | Prisma.EnumPickStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.PickStatus[] | Prisma.ListEnumPickStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.PickStatus[] | Prisma.ListEnumPickStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPickStatusNullableFilter<$PrismaModel> | $Enums.PickStatus | null
+}
+
+export type NestedEnumPickStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PickStatus | Prisma.EnumPickStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.PickStatus[] | Prisma.ListEnumPickStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.PickStatus[] | Prisma.ListEnumPickStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPickStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.PickStatus | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPickStatusNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPickStatusNullableFilter<$PrismaModel>
 }
 
 

@@ -317,6 +317,7 @@ export type PickWhereInput = {
   publishedAt?: Prisma.DateTimeFilter<"Pick"> | Date | string
   lockedAt?: Prisma.DateTimeNullableFilter<"Pick"> | Date | string | null
   tipster?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  followers?: Prisma.BettorPickListRelationFilter
 }
 
 export type PickOrderByWithRelationInput = {
@@ -338,6 +339,7 @@ export type PickOrderByWithRelationInput = {
   publishedAt?: Prisma.SortOrder
   lockedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   tipster?: Prisma.UserOrderByWithRelationInput
+  followers?: Prisma.BettorPickOrderByRelationAggregateInput
 }
 
 export type PickWhereUniqueInput = Prisma.AtLeast<{
@@ -362,6 +364,7 @@ export type PickWhereUniqueInput = Prisma.AtLeast<{
   publishedAt?: Prisma.DateTimeFilter<"Pick"> | Date | string
   lockedAt?: Prisma.DateTimeNullableFilter<"Pick"> | Date | string | null
   tipster?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  followers?: Prisma.BettorPickListRelationFilter
 }, "id">
 
 export type PickOrderByWithAggregationInput = {
@@ -430,6 +433,7 @@ export type PickCreateInput = {
   publishedAt?: Date | string
   lockedAt?: Date | string | null
   tipster: Prisma.UserCreateNestedOneWithoutPicksInput
+  followers?: Prisma.BettorPickCreateNestedManyWithoutPickInput
 }
 
 export type PickUncheckedCreateInput = {
@@ -450,6 +454,7 @@ export type PickUncheckedCreateInput = {
   status?: $Enums.PickStatus
   publishedAt?: Date | string
   lockedAt?: Date | string | null
+  followers?: Prisma.BettorPickUncheckedCreateNestedManyWithoutPickInput
 }
 
 export type PickUpdateInput = {
@@ -470,6 +475,7 @@ export type PickUpdateInput = {
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipster?: Prisma.UserUpdateOneRequiredWithoutPicksNestedInput
+  followers?: Prisma.BettorPickUpdateManyWithoutPickNestedInput
 }
 
 export type PickUncheckedUpdateInput = {
@@ -490,6 +496,7 @@ export type PickUncheckedUpdateInput = {
   status?: Prisma.EnumPickStatusFieldUpdateOperationsInput | $Enums.PickStatus
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followers?: Prisma.BettorPickUncheckedUpdateManyWithoutPickNestedInput
 }
 
 export type PickCreateManyInput = {
@@ -631,6 +638,11 @@ export type PickSumOrderByAggregateInput = {
   stake?: Prisma.SortOrder
 }
 
+export type PickScalarRelationFilter = {
+  is?: Prisma.PickWhereInput
+  isNot?: Prisma.PickWhereInput
+}
+
 export type PickCreateNestedManyWithoutTipsterInput = {
   create?: Prisma.XOR<Prisma.PickCreateWithoutTipsterInput, Prisma.PickUncheckedCreateWithoutTipsterInput> | Prisma.PickCreateWithoutTipsterInput[] | Prisma.PickUncheckedCreateWithoutTipsterInput[]
   connectOrCreate?: Prisma.PickCreateOrConnectWithoutTipsterInput | Prisma.PickCreateOrConnectWithoutTipsterInput[]
@@ -681,6 +693,20 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type PickCreateNestedOneWithoutFollowersInput = {
+  create?: Prisma.XOR<Prisma.PickCreateWithoutFollowersInput, Prisma.PickUncheckedCreateWithoutFollowersInput>
+  connectOrCreate?: Prisma.PickCreateOrConnectWithoutFollowersInput
+  connect?: Prisma.PickWhereUniqueInput
+}
+
+export type PickUpdateOneRequiredWithoutFollowersNestedInput = {
+  create?: Prisma.XOR<Prisma.PickCreateWithoutFollowersInput, Prisma.PickUncheckedCreateWithoutFollowersInput>
+  connectOrCreate?: Prisma.PickCreateOrConnectWithoutFollowersInput
+  upsert?: Prisma.PickUpsertWithoutFollowersInput
+  connect?: Prisma.PickWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PickUpdateToOneWithWhereWithoutFollowersInput, Prisma.PickUpdateWithoutFollowersInput>, Prisma.PickUncheckedUpdateWithoutFollowersInput>
+}
+
 export type PickCreateWithoutTipsterInput = {
   id?: string
   matchId: string
@@ -698,6 +724,7 @@ export type PickCreateWithoutTipsterInput = {
   status?: $Enums.PickStatus
   publishedAt?: Date | string
   lockedAt?: Date | string | null
+  followers?: Prisma.BettorPickCreateNestedManyWithoutPickInput
 }
 
 export type PickUncheckedCreateWithoutTipsterInput = {
@@ -717,6 +744,7 @@ export type PickUncheckedCreateWithoutTipsterInput = {
   status?: $Enums.PickStatus
   publishedAt?: Date | string
   lockedAt?: Date | string | null
+  followers?: Prisma.BettorPickUncheckedCreateNestedManyWithoutPickInput
 }
 
 export type PickCreateOrConnectWithoutTipsterInput = {
@@ -768,6 +796,102 @@ export type PickScalarWhereInput = {
   lockedAt?: Prisma.DateTimeNullableFilter<"Pick"> | Date | string | null
 }
 
+export type PickCreateWithoutFollowersInput = {
+  id?: string
+  matchId: string
+  matchDate: Date | string
+  sport?: string
+  league: string
+  homeTeam: string
+  awayTeam: string
+  pickType: string
+  pickValue: string
+  odds: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stake: number
+  analysis?: string | null
+  isPremium?: boolean
+  status?: $Enums.PickStatus
+  publishedAt?: Date | string
+  lockedAt?: Date | string | null
+  tipster: Prisma.UserCreateNestedOneWithoutPicksInput
+}
+
+export type PickUncheckedCreateWithoutFollowersInput = {
+  id?: string
+  tipsterId: string
+  matchId: string
+  matchDate: Date | string
+  sport?: string
+  league: string
+  homeTeam: string
+  awayTeam: string
+  pickType: string
+  pickValue: string
+  odds: runtime.Decimal | runtime.DecimalJsLike | number | string
+  stake: number
+  analysis?: string | null
+  isPremium?: boolean
+  status?: $Enums.PickStatus
+  publishedAt?: Date | string
+  lockedAt?: Date | string | null
+}
+
+export type PickCreateOrConnectWithoutFollowersInput = {
+  where: Prisma.PickWhereUniqueInput
+  create: Prisma.XOR<Prisma.PickCreateWithoutFollowersInput, Prisma.PickUncheckedCreateWithoutFollowersInput>
+}
+
+export type PickUpsertWithoutFollowersInput = {
+  update: Prisma.XOR<Prisma.PickUpdateWithoutFollowersInput, Prisma.PickUncheckedUpdateWithoutFollowersInput>
+  create: Prisma.XOR<Prisma.PickCreateWithoutFollowersInput, Prisma.PickUncheckedCreateWithoutFollowersInput>
+  where?: Prisma.PickWhereInput
+}
+
+export type PickUpdateToOneWithWhereWithoutFollowersInput = {
+  where?: Prisma.PickWhereInput
+  data: Prisma.XOR<Prisma.PickUpdateWithoutFollowersInput, Prisma.PickUncheckedUpdateWithoutFollowersInput>
+}
+
+export type PickUpdateWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  matchId?: Prisma.StringFieldUpdateOperationsInput | string
+  matchDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sport?: Prisma.StringFieldUpdateOperationsInput | string
+  league?: Prisma.StringFieldUpdateOperationsInput | string
+  homeTeam?: Prisma.StringFieldUpdateOperationsInput | string
+  awayTeam?: Prisma.StringFieldUpdateOperationsInput | string
+  pickType?: Prisma.StringFieldUpdateOperationsInput | string
+  pickValue?: Prisma.StringFieldUpdateOperationsInput | string
+  odds?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stake?: Prisma.IntFieldUpdateOperationsInput | number
+  analysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPickStatusFieldUpdateOperationsInput | $Enums.PickStatus
+  publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipster?: Prisma.UserUpdateOneRequiredWithoutPicksNestedInput
+}
+
+export type PickUncheckedUpdateWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tipsterId?: Prisma.StringFieldUpdateOperationsInput | string
+  matchId?: Prisma.StringFieldUpdateOperationsInput | string
+  matchDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sport?: Prisma.StringFieldUpdateOperationsInput | string
+  league?: Prisma.StringFieldUpdateOperationsInput | string
+  homeTeam?: Prisma.StringFieldUpdateOperationsInput | string
+  awayTeam?: Prisma.StringFieldUpdateOperationsInput | string
+  pickType?: Prisma.StringFieldUpdateOperationsInput | string
+  pickValue?: Prisma.StringFieldUpdateOperationsInput | string
+  odds?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  stake?: Prisma.IntFieldUpdateOperationsInput | number
+  analysis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumPickStatusFieldUpdateOperationsInput | $Enums.PickStatus
+  publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type PickCreateManyTipsterInput = {
   id?: string
   matchId: string
@@ -804,6 +928,7 @@ export type PickUpdateWithoutTipsterInput = {
   status?: Prisma.EnumPickStatusFieldUpdateOperationsInput | $Enums.PickStatus
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followers?: Prisma.BettorPickUpdateManyWithoutPickNestedInput
 }
 
 export type PickUncheckedUpdateWithoutTipsterInput = {
@@ -823,6 +948,7 @@ export type PickUncheckedUpdateWithoutTipsterInput = {
   status?: Prisma.EnumPickStatusFieldUpdateOperationsInput | $Enums.PickStatus
   publishedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lockedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  followers?: Prisma.BettorPickUncheckedUpdateManyWithoutPickNestedInput
 }
 
 export type PickUncheckedUpdateManyWithoutTipsterInput = {
@@ -845,6 +971,35 @@ export type PickUncheckedUpdateManyWithoutTipsterInput = {
 }
 
 
+/**
+ * Count Type PickCountOutputType
+ */
+
+export type PickCountOutputType = {
+  followers: number
+}
+
+export type PickCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  followers?: boolean | PickCountOutputTypeCountFollowersArgs
+}
+
+/**
+ * PickCountOutputType without action
+ */
+export type PickCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PickCountOutputType
+   */
+  select?: Prisma.PickCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PickCountOutputType without action
+ */
+export type PickCountOutputTypeCountFollowersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BettorPickWhereInput
+}
+
 
 export type PickSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -865,6 +1020,8 @@ export type PickSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   publishedAt?: boolean
   lockedAt?: boolean
   tipster?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  followers?: boolean | Prisma.Pick$followersArgs<ExtArgs>
+  _count?: boolean | Prisma.PickCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pick"]>
 
 export type PickSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -932,6 +1089,8 @@ export type PickSelectScalar = {
 export type PickOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tipsterId" | "matchId" | "matchDate" | "sport" | "league" | "homeTeam" | "awayTeam" | "pickType" | "pickValue" | "odds" | "stake" | "analysis" | "isPremium" | "status" | "publishedAt" | "lockedAt", ExtArgs["result"]["pick"]>
 export type PickInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tipster?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  followers?: boolean | Prisma.Pick$followersArgs<ExtArgs>
+  _count?: boolean | Prisma.PickCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PickIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tipster?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -944,6 +1103,7 @@ export type $PickPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Pick"
   objects: {
     tipster: Prisma.$UserPayload<ExtArgs>
+    followers: Prisma.$BettorPickPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1358,6 +1518,7 @@ readonly fields: PickFieldRefs;
 export interface Prisma__PickClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tipster<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  followers<T extends Prisma.Pick$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pick$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BettorPickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1802,6 +1963,30 @@ export type PickDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Picks to delete.
    */
   limit?: number
+}
+
+/**
+ * Pick.followers
+ */
+export type Pick$followersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BettorPick
+   */
+  select?: Prisma.BettorPickSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BettorPick
+   */
+  omit?: Prisma.BettorPickOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BettorPickInclude<ExtArgs> | null
+  where?: Prisma.BettorPickWhereInput
+  orderBy?: Prisma.BettorPickOrderByWithRelationInput | Prisma.BettorPickOrderByWithRelationInput[]
+  cursor?: Prisma.BettorPickWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BettorPickScalarFieldEnum | Prisma.BettorPickScalarFieldEnum[]
 }
 
 /**
