@@ -689,10 +689,6 @@ export type EnumPickStatusFieldUpdateOperationsInput = {
   set?: $Enums.PickStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type PickCreateNestedOneWithoutFollowersInput = {
   create?: Prisma.XOR<Prisma.PickCreateWithoutFollowersInput, Prisma.PickUncheckedCreateWithoutFollowersInput>
   connectOrCreate?: Prisma.PickCreateOrConnectWithoutFollowersInput

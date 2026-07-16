@@ -33,15 +33,29 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const fixtures = await searchFixtures(filters.q, filters.date);
+    try {
+      const fixtures = await searchFixtures(filters.q, filters.date);
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        fixtures,
-        total: fixtures.length,
-        query: filters.q,
-      },
-    });
+      return NextResponse.json({
+        success: true,
+        data: {
+          fixtures,
+          total: fixtures.length,
+          query: filters.q,
+        },
+      });
+    } catch (error) {
+      console.error("Error en searchFixtures:", error);
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            error instanceof Error
+              ? error.message
+              : "Error interno del servidor",
+        },
+        { status: 500 },
+      );
+    }
   });
 }

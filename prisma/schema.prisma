@@ -88,6 +88,9 @@ model TipsterStats {
   streak     Int      @default(0)
   updatedAt  DateTime @updatedAt
 
+  badge      String?      
+  badgeUpdatedAt DateTime?
+
   @@map("tipster_stats")
 }
 

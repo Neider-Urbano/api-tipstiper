@@ -1,16 +1,40 @@
 import prisma from "@/lib/prisma";
-import { requireRole } from "@/lib/auth";
 import { getFixtureById } from "@/lib/api-football";
+import { requireAuth, requireRole } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { $Enums, PickStatus } from "../../../generated/prisma/client";
 import { validatePickInput, PickInput } from "@/lib/pick-validator";
+import { $Enums, PickStatus } from "../../../generated/prisma/client";
+
+const STATUS_GROUP_MAP: Record<string, PickStatus[]> = {
+  active: [PickStatus.PENDING, PickStatus.LOCKED],
+  finished: [PickStatus.WON, PickStatus.LOST, PickStatus.VOID],
+};
+
+type StatusGroup = keyof typeof STATUS_GROUP_MAP;
+
+const VALID_SORT = ["latest", "oldest", "odds", "stake"] as const;
+type SortBy = (typeof VALID_SORT)[number];
+
+const SORT_MAP: Record<SortBy, object> = {
+  latest: { publishedAt: "desc" },
+  oldest: { publishedAt: "asc" },
+  odds: { odds: "desc" },
+  stake: { stake: "desc" },
+};
+
+const VALID_SPORTS = ["football", "basketball", "tennis"] as const;
+type SportFilter = (typeof VALID_SPORTS)[number];
 
 interface PicksSearchParams {
+  tipsterId?: string;
+  statusGroup?: StatusGroup;
+  sport?: SportFilter;
+  minOdds?: number;
+  maxOdds?: number;
+  league?: string;
+  sortBy: SortBy;
   page: number;
   limit: number;
-  league?: string;
-  tipsterId?: string;
-  status: PickStatus | null;
 }
 
 // ── POST /api/picks — Publicar pronóstico ────────────────────────────
@@ -151,121 +175,162 @@ export async function POST(req: NextRequest) {
 }
 
 // ── GET /api/picks — Listar picks con filtros ────────────────────────
-// Query params opcionales:
-//   tipsterId  → picks de un tipster específico
-//   status     → PENDING | LOCKED | WON | LOST | VOID
-//   league     → filtrar por liga
-//   page       → paginación (default 1)
-//   limit      → resultados por página (default 20, max 50)
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+  return requireAuth(req, async (authUser) => {
+    const { searchParams } = new URL(req.url);
 
-  // 2. Extraemos y parseamos los parámetros centralizándolos en el objeto filters
-  const filters: PicksSearchParams = {
-    tipsterId: searchParams.get("tipsterId") ?? undefined,
-    status: searchParams.get("status") as PickStatus | null,
-    league: searchParams.get("league") ?? undefined,
-    page: Math.max(1, Number(searchParams.get("page") ?? "1")),
-    limit: Math.min(50, Math.max(1, Number(searchParams.get("limit") ?? "20"))),
-  };
+    const rawStatusGroup = searchParams.get("statusGroup");
+    const rawSport = searchParams.get("sport");
+    const rawSortBy = searchParams.get("sortBy") ?? "latest";
+    const rawMinOdds = Number(searchParams.get("minOdds"));
+    const rawMaxOdds = Number(searchParams.get("maxOdds"));
 
-  const skip = (filters.page - 1) * filters.limit;
+    const filters: PicksSearchParams = {
+      tipsterId: searchParams.get("tipsterId") ?? undefined,
+      statusGroup:
+        rawStatusGroup && rawStatusGroup in STATUS_GROUP_MAP
+          ? (rawStatusGroup as StatusGroup)
+          : undefined,
+      sport: VALID_SPORTS.includes(rawSport as SportFilter)
+        ? (rawSport as SportFilter)
+        : undefined,
+      minOdds:
+        Number.isFinite(rawMinOdds) && rawMinOdds > 0 ? rawMinOdds : undefined,
+      maxOdds:
+        Number.isFinite(rawMaxOdds) && rawMaxOdds > 0 ? rawMaxOdds : undefined,
+      league: searchParams.get("league") ?? undefined,
+      sortBy: VALID_SORT.includes(rawSortBy as SortBy)
+        ? (rawSortBy as SortBy)
+        : "latest",
+      page: Math.max(1, Number(searchParams.get("page") ?? "1")),
+      limit: Math.min(
+        50,
+        Math.max(1, Number(searchParams.get("limit") ?? "20")),
+      ),
+    };
 
-  // Validar status si viene
-  const validStatuses = Object.values(PickStatus);
-  if (filters.status && !validStatuses.includes(filters.status)) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: `status inválido. Opciones: ${validStatuses.join(", ")}`,
-      },
-      { status: 400 },
-    );
-  }
+    const skip = (filters.page - 1) * filters.limit;
 
-  // Obtener usuario autenticado si hay token (para mostrar análisis premium)
-  const authHeader = req.headers.get("authorization");
-  let currentUserId: string | null = null;
-  if (authHeader?.startsWith("Bearer ")) {
-    try {
-      const { verifyToken } = await import("@/lib/jwt");
-      const payload = verifyToken(authHeader.split(" ")[1]);
-      currentUserId = payload.userId;
-    } catch {
-      // Token inválido — tratar como anónimo
-    }
-  }
+    const requestingUserId = filters.tipsterId
+      ? null
+      : (authUser?.userId ?? null);
 
-  const where = {
-    ...(filters.tipsterId && { tipsterId: filters.tipsterId }),
-    ...(filters.status && { status: filters.status }),
-    ...(filters.league && {
-      league: { contains: filters.league, mode: "insensitive" as const },
-    }),
-  };
+    const where = {
+      // Tipster
+      ...(filters.tipsterId && { tipsterId: filters.tipsterId }),
 
-  const [picks, total] = await Promise.all([
-    prisma.pick.findMany({
-      where,
-      orderBy: { publishedAt: "desc" },
-      skip,
-      take: filters.limit,
-      select: {
-        id: true,
-        matchId: true,
-        matchDate: true,
-        league: true,
-        homeTeam: true,
-        awayTeam: true,
-        pickType: true,
-        pickValue: true,
-        odds: true,
-        stake: true,
-        isPremium: true,
-        status: true,
-        publishedAt: true,
-        lockedAt: true,
-        // El análisis solo se muestra si:
-        // 1. El pick es gratuito, o
-        // 2. El usuario es el tipster dueño del pick
-        // (la lógica de suscripción se añade en fase 2)
-        analysis: true,
-        tipster: {
-          select: {
-            id: true,
-            username: true,
-            avatarUrl: true,
-            stats: {
-              select: { yield: true, winRate: true, totalPicks: true },
+      // Status group → mapea a array de statuses reales
+      ...(filters.statusGroup && {
+        status: { in: STATUS_GROUP_MAP[filters.statusGroup] },
+      }),
+
+      // Sport
+      ...(filters.sport && { sport: filters.sport }),
+
+      // Odds range
+      ...(filters.minOdds !== undefined || filters.maxOdds !== undefined
+        ? {
+            odds: {
+              ...(filters.minOdds !== undefined && { gte: filters.minOdds }),
+              ...(filters.maxOdds !== undefined && { lte: filters.maxOdds }),
+            },
+          }
+        : {}),
+
+      // League
+      ...(filters.league && {
+        league: { contains: filters.league, mode: "insensitive" as const },
+      }),
+
+      // Solo picks de tipsters verificados en el feed global
+      ...(!filters.tipsterId && {
+        tipster: { isVerified: true },
+      }),
+    };
+
+    const [picks, total] = await Promise.all([
+      prisma.pick.findMany({
+        where,
+        orderBy: SORT_MAP[filters.sortBy],
+        skip,
+        take: filters.limit,
+        select: {
+          id: true,
+          matchDate: true,
+          league: true,
+          sport: true,
+          homeTeam: true,
+          awayTeam: true,
+          pickType: true,
+          pickValue: true,
+          odds: true,
+          stake: true,
+          isPremium: true,
+          status: true,
+          publishedAt: true,
+          lockedAt: true,
+          analysis: true,
+          tipster: {
+            select: {
+              id: true,
+              username: true,
+              avatarUrl: true,
+              isVerified: true,
+              stats: {
+                select: {
+                  yield: true,
+                  roi: true,
+                  winRate: true,
+                  totalPicks: true,
+                },
+              },
             },
           },
         },
-      },
-    }),
-    prisma.pick.count({ where }),
-  ]);
+      }),
+      prisma.pick.count({ where }),
+    ]);
 
-  // Ocultar análisis premium si el usuario no tiene acceso
-  const picksWithAccess = picks.map((pick) => ({
-    ...pick,
-    analysis:
-      pick.isPremium && pick.tipster.id !== currentUserId
-        ? null // oculto — en fase 2 verificaremos suscripción
-        : pick.analysis,
-    isPremiumLocked: pick.isPremium && pick.tipster.id !== currentUserId,
-  }));
+    const picksWithAccess = picks.map((pick) => {
+      const isOwner = pick.tipster.id === requestingUserId;
+      const isPremiumLocked = pick.isPremium && !isOwner;
 
-  return NextResponse.json({
-    success: true,
-    data: {
-      picks: picksWithAccess,
-      pagination: {
-        total,
-        page: filters.page,
-        limit: filters.limit,
-        totalPages: Math.ceil(total / filters.limit),
-        hasMore: filters.page * filters.limit < total,
+      return {
+        ...pick,
+        odds: Number(pick.odds),
+        analysis: isPremiumLocked ? null : pick.analysis,
+        isPremiumLocked,
+        tipster: {
+          ...pick.tipster,
+          stats: pick.tipster.stats
+            ? {
+                yield: Number(pick.tipster.stats.yield),
+                roi: Number(pick.tipster.stats.roi),
+                winRate: Number(pick.tipster.stats.winRate),
+                totalPicks: pick.tipster.stats.totalPicks,
+              }
+            : null,
+        },
+      };
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        picks: picksWithAccess,
+        pagination: {
+          total,
+          page: filters.page,
+          limit: filters.limit,
+          totalPages: Math.ceil(total / filters.limit),
+          hasMore: filters.page * filters.limit < total,
+        },
+        meta: {
+          statusGroup: filters.statusGroup ?? null,
+          sport: filters.sport ?? null,
+          sortBy: filters.sortBy,
+        },
       },
-    },
+    });
   });
 }

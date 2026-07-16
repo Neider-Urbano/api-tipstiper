@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/verify-picks",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/recalculate-badges",
+      "schedule": "0 * * * *"
     }
   ]
 }

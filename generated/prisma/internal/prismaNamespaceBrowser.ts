@@ -104,7 +104,9 @@ export const TipsterStatsScalarFieldEnum = {
   unitsWon: 'unitsWon',
   winRate: 'winRate',
   streak: 'streak',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  badge: 'badge',
+  badgeUpdatedAt: 'badgeUpdatedAt'
 } as const
 
 export type TipsterStatsScalarFieldEnum = (typeof TipsterStatsScalarFieldEnum)[keyof typeof TipsterStatsScalarFieldEnum]

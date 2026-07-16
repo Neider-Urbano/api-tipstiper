@@ -57,6 +57,8 @@ export type TipsterStatsMinAggregateOutputType = {
   winRate: runtime.Decimal | null
   streak: number | null
   updatedAt: Date | null
+  badge: string | null
+  badgeUpdatedAt: Date | null
 }
 
 export type TipsterStatsMaxAggregateOutputType = {
@@ -70,6 +72,8 @@ export type TipsterStatsMaxAggregateOutputType = {
   winRate: runtime.Decimal | null
   streak: number | null
   updatedAt: Date | null
+  badge: string | null
+  badgeUpdatedAt: Date | null
 }
 
 export type TipsterStatsCountAggregateOutputType = {
@@ -83,6 +87,8 @@ export type TipsterStatsCountAggregateOutputType = {
   winRate: number
   streak: number
   updatedAt: number
+  badge: number
+  badgeUpdatedAt: number
   _all: number
 }
 
@@ -118,6 +124,8 @@ export type TipsterStatsMinAggregateInputType = {
   winRate?: true
   streak?: true
   updatedAt?: true
+  badge?: true
+  badgeUpdatedAt?: true
 }
 
 export type TipsterStatsMaxAggregateInputType = {
@@ -131,6 +139,8 @@ export type TipsterStatsMaxAggregateInputType = {
   winRate?: true
   streak?: true
   updatedAt?: true
+  badge?: true
+  badgeUpdatedAt?: true
 }
 
 export type TipsterStatsCountAggregateInputType = {
@@ -144,6 +154,8 @@ export type TipsterStatsCountAggregateInputType = {
   winRate?: true
   streak?: true
   updatedAt?: true
+  badge?: true
+  badgeUpdatedAt?: true
   _all?: true
 }
 
@@ -244,6 +256,8 @@ export type TipsterStatsGroupByOutputType = {
   winRate: runtime.Decimal
   streak: number
   updatedAt: Date
+  badge: string | null
+  badgeUpdatedAt: Date | null
   _count: TipsterStatsCountAggregateOutputType | null
   _avg: TipsterStatsAvgAggregateOutputType | null
   _sum: TipsterStatsSumAggregateOutputType | null
@@ -280,6 +294,8 @@ export type TipsterStatsWhereInput = {
   winRate?: Prisma.DecimalFilter<"TipsterStats"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntFilter<"TipsterStats"> | number
   updatedAt?: Prisma.DateTimeFilter<"TipsterStats"> | Date | string
+  badge?: Prisma.StringNullableFilter<"TipsterStats"> | string | null
+  badgeUpdatedAt?: Prisma.DateTimeNullableFilter<"TipsterStats"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -294,6 +310,8 @@ export type TipsterStatsOrderByWithRelationInput = {
   winRate?: Prisma.SortOrder
   streak?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  badge?: Prisma.SortOrderInput | Prisma.SortOrder
+  badgeUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -311,6 +329,8 @@ export type TipsterStatsWhereUniqueInput = Prisma.AtLeast<{
   winRate?: Prisma.DecimalFilter<"TipsterStats"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntFilter<"TipsterStats"> | number
   updatedAt?: Prisma.DateTimeFilter<"TipsterStats"> | Date | string
+  badge?: Prisma.StringNullableFilter<"TipsterStats"> | string | null
+  badgeUpdatedAt?: Prisma.DateTimeNullableFilter<"TipsterStats"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId">
 
@@ -325,6 +345,8 @@ export type TipsterStatsOrderByWithAggregationInput = {
   winRate?: Prisma.SortOrder
   streak?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  badge?: Prisma.SortOrderInput | Prisma.SortOrder
+  badgeUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TipsterStatsCountOrderByAggregateInput
   _avg?: Prisma.TipsterStatsAvgOrderByAggregateInput
   _max?: Prisma.TipsterStatsMaxOrderByAggregateInput
@@ -346,6 +368,8 @@ export type TipsterStatsScalarWhereWithAggregatesInput = {
   winRate?: Prisma.DecimalWithAggregatesFilter<"TipsterStats"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntWithAggregatesFilter<"TipsterStats"> | number
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TipsterStats"> | Date | string
+  badge?: Prisma.StringNullableWithAggregatesFilter<"TipsterStats"> | string | null
+  badgeUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TipsterStats"> | Date | string | null
 }
 
 export type TipsterStatsCreateInput = {
@@ -358,6 +382,8 @@ export type TipsterStatsCreateInput = {
   winRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: number
   updatedAt?: Date | string
+  badge?: string | null
+  badgeUpdatedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutStatsInput
 }
 
@@ -372,6 +398,8 @@ export type TipsterStatsUncheckedCreateInput = {
   winRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: number
   updatedAt?: Date | string
+  badge?: string | null
+  badgeUpdatedAt?: Date | string | null
 }
 
 export type TipsterStatsUpdateInput = {
@@ -384,6 +412,8 @@ export type TipsterStatsUpdateInput = {
   winRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  badge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutStatsNestedInput
 }
 
@@ -398,6 +428,8 @@ export type TipsterStatsUncheckedUpdateInput = {
   winRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  badge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TipsterStatsCreateManyInput = {
@@ -411,6 +443,8 @@ export type TipsterStatsCreateManyInput = {
   winRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: number
   updatedAt?: Date | string
+  badge?: string | null
+  badgeUpdatedAt?: Date | string | null
 }
 
 export type TipsterStatsUpdateManyMutationInput = {
@@ -423,6 +457,8 @@ export type TipsterStatsUpdateManyMutationInput = {
   winRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  badge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TipsterStatsUncheckedUpdateManyInput = {
@@ -436,6 +472,8 @@ export type TipsterStatsUncheckedUpdateManyInput = {
   winRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  badge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TipsterStatsNullableScalarRelationFilter = {
@@ -454,6 +492,8 @@ export type TipsterStatsCountOrderByAggregateInput = {
   winRate?: Prisma.SortOrder
   streak?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  badge?: Prisma.SortOrder
+  badgeUpdatedAt?: Prisma.SortOrder
 }
 
 export type TipsterStatsAvgOrderByAggregateInput = {
@@ -477,6 +517,8 @@ export type TipsterStatsMaxOrderByAggregateInput = {
   winRate?: Prisma.SortOrder
   streak?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  badge?: Prisma.SortOrder
+  badgeUpdatedAt?: Prisma.SortOrder
 }
 
 export type TipsterStatsMinOrderByAggregateInput = {
@@ -490,6 +532,8 @@ export type TipsterStatsMinOrderByAggregateInput = {
   winRate?: Prisma.SortOrder
   streak?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  badge?: Prisma.SortOrder
+  badgeUpdatedAt?: Prisma.SortOrder
 }
 
 export type TipsterStatsSumOrderByAggregateInput = {
@@ -550,6 +594,10 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type TipsterStatsCreateWithoutUserInput = {
   id?: string
   totalPicks?: number
@@ -560,6 +608,8 @@ export type TipsterStatsCreateWithoutUserInput = {
   winRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: number
   updatedAt?: Date | string
+  badge?: string | null
+  badgeUpdatedAt?: Date | string | null
 }
 
 export type TipsterStatsUncheckedCreateWithoutUserInput = {
@@ -572,6 +622,8 @@ export type TipsterStatsUncheckedCreateWithoutUserInput = {
   winRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: number
   updatedAt?: Date | string
+  badge?: string | null
+  badgeUpdatedAt?: Date | string | null
 }
 
 export type TipsterStatsCreateOrConnectWithoutUserInput = {
@@ -600,6 +652,8 @@ export type TipsterStatsUpdateWithoutUserInput = {
   winRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  badge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TipsterStatsUncheckedUpdateWithoutUserInput = {
@@ -612,6 +666,8 @@ export type TipsterStatsUncheckedUpdateWithoutUserInput = {
   winRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  badge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  badgeUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -627,6 +683,8 @@ export type TipsterStatsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   winRate?: boolean
   streak?: boolean
   updatedAt?: boolean
+  badge?: boolean
+  badgeUpdatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tipsterStats"]>
 
@@ -641,6 +699,8 @@ export type TipsterStatsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   winRate?: boolean
   streak?: boolean
   updatedAt?: boolean
+  badge?: boolean
+  badgeUpdatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tipsterStats"]>
 
@@ -655,6 +715,8 @@ export type TipsterStatsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   winRate?: boolean
   streak?: boolean
   updatedAt?: boolean
+  badge?: boolean
+  badgeUpdatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tipsterStats"]>
 
@@ -669,9 +731,11 @@ export type TipsterStatsSelectScalar = {
   winRate?: boolean
   streak?: boolean
   updatedAt?: boolean
+  badge?: boolean
+  badgeUpdatedAt?: boolean
 }
 
-export type TipsterStatsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "totalPicks" | "wonPicks" | "yield" | "roi" | "unitsWon" | "winRate" | "streak" | "updatedAt", ExtArgs["result"]["tipsterStats"]>
+export type TipsterStatsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "totalPicks" | "wonPicks" | "yield" | "roi" | "unitsWon" | "winRate" | "streak" | "updatedAt" | "badge" | "badgeUpdatedAt", ExtArgs["result"]["tipsterStats"]>
 export type TipsterStatsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -698,6 +762,8 @@ export type $TipsterStatsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     winRate: runtime.Decimal
     streak: number
     updatedAt: Date
+    badge: string | null
+    badgeUpdatedAt: Date | null
   }, ExtArgs["result"]["tipsterStats"]>
   composites: {}
 }
@@ -1132,6 +1198,8 @@ export interface TipsterStatsFieldRefs {
   readonly winRate: Prisma.FieldRef<"TipsterStats", 'Decimal'>
   readonly streak: Prisma.FieldRef<"TipsterStats", 'Int'>
   readonly updatedAt: Prisma.FieldRef<"TipsterStats", 'DateTime'>
+  readonly badge: Prisma.FieldRef<"TipsterStats", 'String'>
+  readonly badgeUpdatedAt: Prisma.FieldRef<"TipsterStats", 'DateTime'>
 }
     
 

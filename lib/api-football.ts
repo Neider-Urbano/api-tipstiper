@@ -79,6 +79,8 @@ async function fetchFootball(
 
   const data = await res.json();
 
+  console.log("auiiiiiiii", data);
+
   // API-Football devuelve errores dentro del body con status 200
   if (data.errors && Object.keys(data.errors).length > 0) {
     throw new Error(`API-Football error: ${JSON.stringify(data.errors)}`);
@@ -125,11 +127,28 @@ export async function searchFixtures(
   query: string,
   date?: string,
 ): Promise<FixtureDto[]> {
-  const fixtures = await fetchFootball("/fixtures", {
-    search: query,
-    date: date ?? getBogotaDate(),
+  const baseDateStr = getBogotaDate(); // Formato esperado: "YYYY-MM-DD"
+  const baseDate = new Date(`${baseDateStr}T00:00:00-05:00`);
+
+  const oneMonthAgo = new Date(baseDate);
+  oneMonthAgo.setMonth(baseDate.getMonth() - 1);
+
+  const oneMonthAhead = new Date(baseDate);
+  oneMonthAhead.setMonth(baseDate.getMonth() + 1);
+
+  baseDate.setDate(baseDate.getDate() + 1);
+  const tomorrowStr = baseDate.toLocaleDateString("sv-SE");
+
+  const params: Record<string, string> = {
+    // season: baseDate.getFullYear().toString(), // Año de la temporada actual
+    // from: oneMonthAgo.toLocaleDateString("sv-SE"), // Formato "YYYY-MM-DD"
+    // to: oneMonthAhead.toLocaleDateString("sv-SE"), // Formato "YYYY-MM-DD"
+    date: tomorrowStr,
     timezone: "America/Bogota",
-  });
+    status: "NS",
+  };
+
+  const fixtures = await fetchFootball("/fixtures", params);
 
   return fixtures
     .filter((f) => f.fixture.status.short === "NS") // solo no iniciados
