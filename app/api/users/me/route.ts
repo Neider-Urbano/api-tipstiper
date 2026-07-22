@@ -1,26 +1,25 @@
 import prisma from "@/lib/prisma";
-import { requireRole } from "@/lib/auth";
-import { $Enums } from "@/generated/prisma/client";
+import { requireAuth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 interface UpdateProfileBody {
   bio?: string;
-  avatarUrl?: string;
+  username?: string;
   subscriptionPrice?: number; // precio mensual en COP que cobrará a suscriptores
 }
 
 export async function PATCH(req: NextRequest) {
-  return requireRole(req, $Enums.Role.TIPSTER, async (authUser) => {
+  return requireAuth(req, async (authUser) => {
     const body: UpdateProfileBody = await req.json();
-    const { bio, avatarUrl, subscriptionPrice } = body;
+    const { bio, username, subscriptionPrice } = body;
 
     // Al menos un campo debe venir
-    if (!bio && !avatarUrl && subscriptionPrice === undefined) {
+    if (!bio && !username && subscriptionPrice === undefined) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Debes enviar al menos un campo para actualizar: bio, avatarUrl o subscriptionPrice",
+            "Debes enviar al menos un campo para actualizar: bio, username o subscriptionPrice",
         },
         { status: 400 },
       );
@@ -34,13 +33,20 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    if (avatarUrl !== undefined) {
-      try {
-        new URL(avatarUrl);
-      } catch {
+    if (username) {
+      const existing = await prisma.user.findFirst({
+        where: {
+          username: username.toLowerCase(),
+          NOT: {
+            id: authUser.userId,
+          },
+        },
+      });
+
+      if (existing) {
         return NextResponse.json(
-          { success: false, error: "avatarUrl debe ser una URL válida" },
-          { status: 400 },
+          { success: false, error: `Este username ya está registrado` },
+          { status: 409 },
         );
       }
     }
@@ -70,7 +76,7 @@ export async function PATCH(req: NextRequest) {
       where: { id: authUser.userId },
       data: {
         ...(bio !== undefined && { bio }),
-        ...(avatarUrl !== undefined && { avatarUrl }),
+        ...(username !== undefined && { username }),
         ...(subscriptionPrice !== undefined && { subscriptionPrice }),
       },
       select: {

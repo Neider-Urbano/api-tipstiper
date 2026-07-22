@@ -48,7 +48,10 @@ model User {
   username    String   @unique
   password    String
   role        Role
+  isActive    Boolean @default(true)
   avatarUrl   String?
+  avatarPublicId String?
+
   bio         String?
   isVerified  Boolean  @default(false)
   createdAt   DateTime @default(now())

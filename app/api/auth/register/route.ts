@@ -1,9 +1,10 @@
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { signToken } from "@/lib/jwt";
-import { allowedRoles } from "@/lib/user";
-import { NextRequest, NextResponse } from "next/server";
+import { HttpError } from "@/lib/HttpError";
 import { $Enums } from "@/generated/prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import { allowedRoles, validatePassword } from "@/lib/user";
 
 interface RegisterBody {
   email: string;
@@ -35,15 +36,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (password.length < 8) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "La contraseña debe tener mínimo 8 caracteres",
-        },
-        { status: 400 },
-      );
-    }
+    validatePassword(password);
 
     // Validar formato de email básico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -113,8 +106,21 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error("[POST /api/auth/register]", error);
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: error.message,
+        },
+        { status: error.status },
+      );
+    }
+
     return NextResponse.json(
-      { success: false, error: "Error interno del servidor" },
+      {
+        success: false,
+        error: "Error interno del servidor",
+      },
       { status: 500 },
     );
   }
