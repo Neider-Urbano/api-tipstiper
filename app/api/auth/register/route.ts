@@ -5,6 +5,7 @@ import { HttpError } from "@/lib/HttpError";
 import { $Enums } from "@/generated/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { allowedRoles, validatePassword } from "@/lib/user";
+import { sendEmail, WelcomeEmail } from "@/emails";
 
 interface RegisterBody {
   email: string;
@@ -95,6 +96,27 @@ export async function POST(req: NextRequest) {
       email: user.email,
       role: user.role,
     });
+
+    (async () => {
+      try {
+        await sendEmail(
+          WelcomeEmail,
+          {
+            username: user.username,
+            appUrl: process.env.NEXT_PUBLIC_APP_URL || "",
+          },
+          {
+            to: user.email,
+            subject: "Bienvenido a Pick Verso!",
+          },
+        );
+      } catch (emailError) {
+        console.error(
+          "[POST /api/auth/register] Error enviando email de bienvenida:",
+          emailError,
+        );
+      }
+    })();
 
     return NextResponse.json(
       {
